@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import './App.css';
 import SpotifyWebApi from 'spotify-web-api-js';
+import Sidebar from './components/Sidebar';
 
 type param = {
   access_token: string
@@ -52,8 +52,8 @@ function App() {
   return (
     <div className="App">
       { !loggedIn && <a href='http://localhost:8888'>Login to Spotify</a>}
-      
-      <div>
+      <Sidebar />
+      {/* <div>
         Now Playing: { nowPlaying.name }
       </div>
       <div>
@@ -63,7 +63,7 @@ function App() {
         <button onClick={() => fetchSong(setNowPlaying)}>
           Check Now Playing
         </button>
-      }
+      } */}
     </div>
   );
 }
