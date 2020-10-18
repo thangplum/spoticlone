@@ -97,7 +97,13 @@ body{
     cursor: pointer;
 }
 
-.NavItem:hover, .NavItem:selected > .nav-link{
+.NavItem:hover > .nav-link{
+    color: #fff;
+}
+
+.NavItem.selected > .nav-link{
+    background-color: #2e77d0;
+    border-left: 4px;
     color: #fff;
 }
 

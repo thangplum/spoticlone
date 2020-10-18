@@ -4,7 +4,7 @@ interface NavListProps {
 
 }
 
-export const NavList: React.FC<NavListProps> = ({children}) => {
+const NavList: React.FC<NavListProps> = ({children}) => {
     return (
         <ul className="nav-list">
             {children}
