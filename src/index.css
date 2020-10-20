@@ -102,7 +102,7 @@ body{
 }
 
 .NavItem.selected > .nav-link{
-    background-color: #2e77d0;
+    background-color: #ffffff2f;
     border-left: 4px;
     color: #fff;
 }

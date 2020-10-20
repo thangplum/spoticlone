@@ -1,58 +1,58 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SpotifyWebApi from 'spotify-web-api-js';
 import Sidebar from './components/Sidebar';
+import { getHashParams } from './utilities/getHashParams';
 
-type param = {
-  access_token: string
-}
+// function fetchSong(setNowPlaying: React.Dispatch<React.SetStateAction<nowPlayingSong>>): void {
+//   spotifyApi.getMyCurrentPlayingTrack()
+//     .then(response => {
+//       if (!response) {
+//         console.log("Cannot fetch");
+//       }
+//       console.log(response);
+//       setNowPlaying({name: response.item?.name!, albumArt: response.item?.album.images[0].url!});
+//       return response.item;
+//     })
+// }
 
-type nowPlayingSong = {
-  name: string,
-  albumArt: string
-}
-
-const spotifyApi = new SpotifyWebApi();
-
-function fetchSong(setNowPlaying: React.Dispatch<React.SetStateAction<nowPlayingSong>>): void {
-  spotifyApi.getMyCurrentPlayingTrack()
-    .then(response => {
-      if (!response) {
-        console.log("Cannot fetch");
-      }
-      console.log(response);
-      setNowPlaying({name: response.item?.name!, albumArt: response.item?.album.images[0].url!});
-      return response.item;
-    })
-}
-
-function getHashParams() {
-  let hashParams = {} as param;
-  var e, r = /([^&;=]+)=?([^&;]*)/g,
-      q = window.location.hash.substring(1);
-  e = r.exec(q)
-  while (e) {
-    hashParams[e[1] as keyof param] = decodeURIComponent(e[2]);
-    e = r.exec(q);
-  }
-  return hashParams;
-}
 
 
 function App() {
-  const params = getHashParams();
+  const [token, setToken] = useState("");
+  const [loggedIn, setLogIn] = useState(false);
+  // const [nowPlaying, setNowPlaying] = useState({name: 'Not Checked', albumArt: ''} as nowPlayingSong);
+  const [playlists, setPlaylists] = useState<SpotifyApi.PlaylistObjectSimplified[]>([]);
+
+  useEffect(() => {
+    const spotifyApi = new SpotifyWebApi();
+    const params = getHashParams();
+    
+    const token = params.access_token;
+    if (token) {
+      spotifyApi.setAccessToken(token);
+      setLogIn(true);
+      setToken(token);
+
+      //fetch playlists
+      spotifyApi.getUserPlaylists().
+        then(
+          function(data) {
+            setPlaylists(data.items);
+          },
+          function(err) {
+            console.log(err);
+          }
+        )
+      
+    }
+  })
   
-  const token = params.access_token;
-  const [loggedIn, setLogIn] = useState(token ? true : false);
-  const [nowPlaying, setNowPlaying] = useState({name: 'Not Checked', albumArt: ''} as nowPlayingSong);
   
-  if (token) {
-    spotifyApi.setAccessToken(token);
-  }
   
   return (
     <div className="App">
       { !loggedIn && <a href='http://localhost:8888'>Login to Spotify</a>}
-      <Sidebar />
+      <Sidebar playlists={playlists} />
       {/* <div>
         Now Playing: { nowPlaying.name }
       </div>

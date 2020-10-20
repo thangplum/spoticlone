@@ -3,12 +3,13 @@ import Logo from "../icons/Logo";
 import NavList from './SidebarComponent/NavList';
 import { NavItem } from './SidebarComponent/NavItem';
 import { PlayList } from './SidebarComponent/PlayList';
+import SpotifyWebApi from 'spotify-web-api-js';
 
 interface SideBarProps {
-
+    playlists: SpotifyApi.PlaylistObjectSimplified[]
 }
 
-const SideBar: React.FC<SideBarProps> = ({}) => {
+const SideBar: React.FC<SideBarProps> = ({playlists}) => {
     const [selected, getSelected] = useState("Home");
 
     return (
@@ -20,7 +21,7 @@ const SideBar: React.FC<SideBarProps> = ({}) => {
                     <NavItem to="/search" iconName='Search' label='Search' getSelected={getSelected} currentState={selected}></NavItem>
                     <NavItem to="/collection" iconName='Library' label='Library' getSelected={getSelected} currentState={selected}></NavItem>
                 </NavList>
-                <PlayList />
+                <PlayList playlists={playlists} />
             </div>
         </>
     );
