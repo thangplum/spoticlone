@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import SpotifyWebApi from 'spotify-web-api-js';
-import Sidebar from './components/Sidebar';
+import Sidebar from './components/SidebarComponent/Sidebar';
 import { getHashParams } from './utilities/getHashParams';
+import { LoginContext } from './utilities/context'
 
 // function fetchSong(setNowPlaying: React.Dispatch<React.SetStateAction<nowPlayingSong>>): void {
 //   spotifyApi.getMyCurrentPlayingTrack()
@@ -22,9 +23,10 @@ function App() {
   const [loggedIn, setLogIn] = useState(false);
   // const [nowPlaying, setNowPlaying] = useState({name: 'Not Checked', albumArt: ''} as nowPlayingSong);
   const [playlists, setPlaylists] = useState<SpotifyApi.PlaylistObjectSimplified[]>([]);
+  const spotifyApi = new SpotifyWebApi();
 
   useEffect(() => {
-    const spotifyApi = new SpotifyWebApi();
+    
     const params = getHashParams();
     
     const token = params.access_token;
@@ -52,18 +54,10 @@ function App() {
   return (
     <div className="App">
       { !loggedIn && <a href='http://localhost:8888'>Login to Spotify</a>}
-      <Sidebar playlists={playlists} />
-      {/* <div>
-        Now Playing: { nowPlaying.name }
-      </div>
-      <div>
-        <img src={ nowPlaying.albumArt } style={{ height: 150 }}/>
-      </div>
-      { loggedIn &&
-        <button onClick={() => fetchSong(setNowPlaying)}>
-          Check Now Playing
-        </button>
-      } */}
+      <LoginContext.Provider value={loggedIn}>
+        <Sidebar playlists={playlists} />
+      </LoginContext.Provider>
+      
     </div>
   );
 }

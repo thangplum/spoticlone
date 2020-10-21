@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
-import Logo from "../icons/Logo";
-import NavList from './SidebarComponent/NavList';
-import { NavItem } from './SidebarComponent/NavItem';
-import { PlayList } from './SidebarComponent/PlayList';
-import SpotifyWebApi from 'spotify-web-api-js';
+import React, { useContext, useState } from 'react';
+import Logo from "../../icons/Logo";
+import NavList from './NavList';
+import { NavItem } from './NavItem';
+import { PlayList } from './PlayList';
+import { Install } from './Install';
+import { LoginContext } from '../../utilities/context';
+
 
 interface SideBarProps {
     playlists: SpotifyApi.PlaylistObjectSimplified[]
@@ -11,7 +13,7 @@ interface SideBarProps {
 
 const SideBar: React.FC<SideBarProps> = ({playlists}) => {
     const [selected, getSelected] = useState("Home");
-
+    const loggedIn = useContext(LoginContext);
     return (
         <>
             <div className="sidebar">
@@ -21,7 +23,10 @@ const SideBar: React.FC<SideBarProps> = ({playlists}) => {
                     <NavItem to="/search" iconName='Search' label='Search' getSelected={getSelected} currentState={selected}></NavItem>
                     <NavItem to="/collection" iconName='Library' label='Library' getSelected={getSelected} currentState={selected}></NavItem>
                 </NavList>
+                
                 <PlayList playlists={playlists} />
+                {loggedIn ? <Install /> : null}
+                
             </div>
         </>
     );
