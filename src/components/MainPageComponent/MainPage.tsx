@@ -1,0 +1,36 @@
+import React, { useContext, useState } from 'react'
+import { HistoryToggle } from './HistoryToggle';
+import { NavBar } from './NavBar';
+import { Route } from 'react-router-dom'
+import { SearchBar } from './SearchBar';
+import { CollectionHeader } from './CollectionHeader';
+import { LoginContext } from '../../utilities/context';
+import UserInfo from './UserInfo';
+import { UserPrompt } from './UserPrompt';
+
+interface MainPageProps {
+
+}
+
+export const MainPage: React.FC<MainPageProps> = ({}) => {
+    const [query, setQuery] = useState("")
+    const login = useContext(LoginContext);
+    const resetQuery = () => {
+        setQuery("")
+    }
+    return (
+        <div className="featured">
+            <NavBar>
+                <HistoryToggle />
+                <Route exact path="/search">
+                    <SearchBar query={query} setQuery={setQuery} resetQuery={resetQuery} />
+                </Route>
+                <Route exact path="/collection">
+                    <CollectionHeader />
+                </Route>
+                {login ? <UserInfo /> : <UserPrompt />}
+            </NavBar>
+        </div>
+        
+    );
+}

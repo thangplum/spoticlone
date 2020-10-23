@@ -1,0 +1,14 @@
+import React from 'react'
+import Icon from '../../icons';
+
+interface HistoryButtonProps {
+    property: string
+}
+
+export const HistoryButton: React.FC<HistoryButtonProps> = ({property}) => {
+    return (
+        <button className={property === 'Back'? 'navButton no-outline':'navButton mediaNone no-outline'} title="Sorry this is just too much work for something not that entirely useful. Just use the browser's buttons :)"> 
+            <Icon name={property} />
+        </button>
+    );
+}

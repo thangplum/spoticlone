@@ -2,26 +2,14 @@ import React, { useEffect, useState } from 'react';
 import SpotifyWebApi from 'spotify-web-api-js';
 import Sidebar from './components/SidebarComponent/Sidebar';
 import { getHashParams } from './utilities/getHashParams';
-import { LoginContext } from './utilities/context'
-
-// function fetchSong(setNowPlaying: React.Dispatch<React.SetStateAction<nowPlayingSong>>): void {
-//   spotifyApi.getMyCurrentPlayingTrack()
-//     .then(response => {
-//       if (!response) {
-//         console.log("Cannot fetch");
-//       }
-//       console.log(response);
-//       setNowPlaying({name: response.item?.name!, albumArt: response.item?.album.images[0].url!});
-//       return response.item;
-//     })
-// }
-
-
+import { LoginContext, UserContext, userContext, USER_CONTEXT_DEFAULT } from './utilities/context'
+import { MainPage } from './components/MainPageComponent/MainPage';
+import { Console } from 'console';
 
 function App() {
   const [token, setToken] = useState("");
   const [loggedIn, setLogIn] = useState(false);
-  // const [nowPlaying, setNowPlaying] = useState({name: 'Not Checked', albumArt: ''} as nowPlayingSong);
+  const [user, setUser] = useState<userContext>(USER_CONTEXT_DEFAULT)
   const [playlists, setPlaylists] = useState<SpotifyApi.PlaylistObjectSimplified[]>([]);
   const spotifyApi = new SpotifyWebApi();
 
@@ -39,6 +27,7 @@ function App() {
       spotifyApi.getUserPlaylists().
         then(
           function(data) {
+            console.log(data)
             setPlaylists(data.items);
           },
           function(err) {
@@ -46,8 +35,20 @@ function App() {
           }
         )
       
+      //fetch user account information
+      spotifyApi.getMe()
+          .then(
+            function(data) {
+              console.log(data)
+              //cast response type to local type
+              setUser(data as userContext)
+            },
+            function(err) {
+              console.log(err)
+            }
+          )
     }
-  })
+  }, [])
   
   
   
@@ -57,6 +58,13 @@ function App() {
       <LoginContext.Provider value={loggedIn}>
         <Sidebar playlists={playlists} />
       </LoginContext.Provider>
+      <UserContext.Provider value={user}>
+        <LoginContext.Provider value={loggedIn}>
+          <MainPage />
+        </LoginContext.Provider>
+      </UserContext.Provider>
+        
+      
       
     </div>
   );
