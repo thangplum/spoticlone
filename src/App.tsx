@@ -63,8 +63,6 @@ function App() {
           <MainPage />
         </LoginContext.Provider>
       </UserContext.Provider>
-        
-      
       
     </div>
   );
