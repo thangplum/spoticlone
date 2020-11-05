@@ -1,9 +1,9 @@
 import React, { useContext } from 'react'
 import { Link, useHistory } from 'react-router-dom';
 import Icon from '../../icons';
+import { TokenContext, LoginContext } from '../../utilities/context';
 import { CardDisplay } from './CardDisplay';
 import { CardInfo } from './CardInfo';
-import {TokenContext, LoginContext, PlayContext, MessageContext} from '../../utilities/context'
 
 interface PlayCardProps {
     info: any,
@@ -28,16 +28,13 @@ function returnDescription(type:string, info:any){
     }
 }
 
-export const PlayCard = React.forwardRef<HTMLDivElement, PlayCardProps>(({info, type}, ref) => {
+export const PlayCard: React.FC<PlayCardProps> = ({info, type}) => {
     const history = useHistory();
     const description = returnDescription(type, info);
     const {name, id, uri} = info;
 
-    const setMessage = useContext(MessageContext);
-
     const token = useContext(TokenContext);
     const loggedIn = useContext(LoginContext);
-    const updatePlayer = useContext(PlayContext);
 
     let images
     if (type === 'track'){
@@ -53,25 +50,26 @@ export const PlayCard = React.forwardRef<HTMLDivElement, PlayCardProps>(({info, 
     }
     
     return (
-        <div className="pcWrapper">
-            <Link to={info.to? info.to : type === 'track'? `/album/${info.album.id}?highlight=${id}`:`/${type}/${id}`} style={{textDecoration:'none', color:'var(--main-text)', zIndex:'3'}}>
-                <div ref={ref} className="PlayCard">
-                    <CardDisplay url={image_url} type={type}/>
-                    <CardInfo title={name} description={description}/>
-                </div>
-            </Link>
-            {loggedIn? 
-            <button className="smallButton no-outline" title="Play" onClick={() => {
-                playContext()
-                updatePlayer()
-            }}>
-                <Icon name="Play" height='17' width='17'/>
-            </button>
-            :
-            <button className="smallButton no-outline" title="Play" data-tip='play' data-for='tooltipMain' data-event='click'>
-                <Icon name="Play" height='17' width='17'/>
-            </button>
-            }
-        </div>
+        // <div className="pcWrapper">
+        //     <Link to={info.to? info.to : type === 'track'? `/album/${info.album.id}?highlight=${id}`:`/${type}/${id}`} style={{textDecoration:'none', color:'var(--main-text)', zIndex:'3'}}>
+        //         <div ref={ref} className="PlayCard">
+        //             <CardDisplay url={image_url} type={type}/>
+        //             <CardInfo title={name} description={description}/>
+        //         </div>
+        //     </Link>
+        //     {loggedIn? 
+        //     <button className="smallButton no-outline" title="Play" onClick={() => {
+        //         playContext()
+        //         updatePlayer()
+        //     }}>
+        //         <Icon name="Play" height='17' width='17'/>
+        //     </button>
+        //     :
+        //     <button className="smallButton no-outline" title="Play" data-tip='play' data-for='tooltipMain' data-event='click'>
+        //         <Icon name="Play" height='17' width='17'/>
+        //     </button>
+        //     }
+        // </div>
+        <div></div>
     );
-})
+}

@@ -7,6 +7,7 @@ import { CollectionHeader } from './CollectionHeader';
 import { LoginContext } from '../../utilities/context';
 import UserInfo from './UserInfo';
 import { UserPrompt } from './UserPrompt';
+import { PageContent } from './PageContent';
 
 interface MainPageProps {
 
@@ -18,6 +19,7 @@ export const MainPage: React.FC<MainPageProps> = ({}) => {
     const resetQuery = () => {
         setQuery("")
     }
+    
     return (
         <div className="featured">
             <NavBar>
@@ -30,6 +32,7 @@ export const MainPage: React.FC<MainPageProps> = ({}) => {
                 </Route>
                 {login ? <UserInfo /> : <UserPrompt />}
             </NavBar>
+            <PageContent query={query} />
         </div>
         
     );

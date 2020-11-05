@@ -2,7 +2,7 @@ import React from 'react'
 
 interface CollectionTitleProps {
     title: string,
-    id: string
+    id: string | null
 }
 
 export const CollectionTitle: React.FC<CollectionTitleProps> = ({title, id}) => {

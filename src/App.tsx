@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import SpotifyWebApi from 'spotify-web-api-js';
 import Sidebar from './components/SidebarComponent/Sidebar';
 import { getHashParams } from './utilities/getHashParams';
-import { LoginContext, UserContext, userContext, USER_CONTEXT_DEFAULT } from './utilities/context'
+import { LoginContext, UserContext, userContext, USER_CONTEXT_DEFAULT, TokenContext } from './utilities/context'
 import { MainPage } from './components/MainPageComponent/MainPage';
-import { Console } from 'console';
 
 function App() {
   const [token, setToken] = useState("");
@@ -27,7 +26,6 @@ function App() {
       spotifyApi.getUserPlaylists().
         then(
           function(data) {
-            console.log(data)
             setPlaylists(data.items);
           },
           function(err) {
@@ -39,7 +37,6 @@ function App() {
       spotifyApi.getMe()
           .then(
             function(data) {
-              console.log(data)
               //cast response type to local type
               setUser(data as userContext)
             },
@@ -51,7 +48,6 @@ function App() {
   }, [])
   
   
-  
   return (
     <div className="App">
       { !loggedIn && <a href='http://localhost:8888'>Login to Spotify</a>}
@@ -60,7 +56,9 @@ function App() {
       </LoginContext.Provider>
       <UserContext.Provider value={user}>
         <LoginContext.Provider value={loggedIn}>
-          <MainPage />
+          <TokenContext.Provider value={token}>
+            <MainPage />
+          </TokenContext.Provider>
         </LoginContext.Provider>
       </UserContext.Provider>
       

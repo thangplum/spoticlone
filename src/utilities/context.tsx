@@ -46,3 +46,4 @@ export const USER_CONTEXT_DEFAULT = {
 
 export const LoginContext = createContext(false)
 export const UserContext = createContext<userContext>(USER_CONTEXT_DEFAULT)
+export const TokenContext = createContext("")
