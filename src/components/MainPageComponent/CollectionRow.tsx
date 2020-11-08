@@ -5,14 +5,15 @@ import { CollectionTitle } from './CollectionTitle'
 
 interface CollectionRowProps {
         name: string,
+        description?: string,
         playlists: any,
         id: string | null
 }
 
-export const CollectionRow = React.forwardRef<HTMLDivElement, CollectionRowProps>(({name, playlists, id}, ref) => {
+export const CollectionRow = React.forwardRef<HTMLDivElement, CollectionRowProps>(({name, playlists, id, description}, ref) => {
         return (
                 <div className="CollectionRow">
-                        <CollectionTitle title={name} id={id}/>
+                        <CollectionTitle title={name} id={id} description={description}/>
                         <CollectionDisplay ref={ref} playlists={playlists}/>
                 </div>
         )

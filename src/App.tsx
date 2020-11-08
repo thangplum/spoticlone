@@ -50,8 +50,6 @@ function App() {
   
   return (
     <div className="App">
-      
-
       <LoginContext.Provider value={loggedIn}>
         <Sidebar playlists={playlists} />
       </LoginContext.Provider>

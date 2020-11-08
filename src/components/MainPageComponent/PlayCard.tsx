@@ -19,7 +19,7 @@ function returnDescription(type:string, info:any){
             artists = info.artists.map((object:any) => object.name)
             return artists.length === 1 ? artists[0]:artists.join(', ')
         case 'artist':
-            return 'artist'
+            return 'Artist'
         case 'track':
             artists = info.artists.map((object:any) => object.name)
             return artists.length === 1 ? artists[0]:artists.join(', ')
