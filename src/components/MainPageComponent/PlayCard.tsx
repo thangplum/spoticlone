@@ -70,6 +70,17 @@ export const PlayCard: React.FC<PlayCardProps> = ({info, type}) => {
         //     </button>
         //     }
         // </div>
-        <div></div>
+        <div className="pcWrapper">
+            <Link to={info.to? info.to : type === 'track'? `/album/${info.album.id}?highlight=${id}`:`/${type}/${id}`} style={{textDecoration:'none', color:'var(--main-text)', zIndex:3}}>
+                <div className="PlayCard">
+                    <CardDisplay url={image_url} type={type}/>
+                    <CardInfo title={name} description={description}/>
+                </div>
+            </Link>
+            {/* TODO: Add logged in onclick  to play the track */}
+            <button className="smallButton no-outline" title="Play">
+                <Icon name="Play" height='17' width='17'/>
+            </button>
+        </div>
     );
 }

@@ -18,8 +18,8 @@ const titleStyle = {
 } as React.CSSProperties;
 
 const descriptionStyle = {
-    fontSize: '11px',
-    fontWeight: 400,
+    fontSize: '13px',
+    fontWeight: 500,
     lineHeight: '16px',
     letterSpacing: 'normal',
     textTransform: "none",

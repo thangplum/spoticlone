@@ -21,7 +21,7 @@ const SideBar: React.FC<SideBarProps> = ({playlists}) => {
                 <NavList>
                     <NavItem to="/" iconName='Home' label='Home' getSelected={getSelected} currentState={selected}></NavItem>
                     <NavItem to="/search" iconName='Search' label='Search' getSelected={getSelected} currentState={selected}></NavItem>
-                    <NavItem to="/collection" iconName='Library' label='Library' getSelected={getSelected} currentState={selected}></NavItem>
+                    <NavItem to="/collection" iconName='Library' label=' Your Library' getSelected={getSelected} currentState={selected}></NavItem>
                 </NavList>
                 
                 <PlayList playlists={playlists} />
