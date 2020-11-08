@@ -50,10 +50,12 @@ function App() {
   
   return (
     <div className="App">
-      { !loggedIn && <a href='http://localhost:8888'>Login to Spotify</a>}
+      
+
       <LoginContext.Provider value={loggedIn}>
         <Sidebar playlists={playlists} />
       </LoginContext.Provider>
+
       <UserContext.Provider value={user}>
         <LoginContext.Provider value={loggedIn}>
           <TokenContext.Provider value={token}>

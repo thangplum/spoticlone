@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { CollectionRow } from '../components/MainPageComponent/CollectionRow';
 import SpotifyWebApi from 'spotify-web-api-js';
-import { TokenContext } from '../utilities/context';
+import { LoginContext } from '../utilities/context';
 import { getHashParams } from '../utilities/getHashParams';
 
 interface HomeProps {
@@ -11,6 +11,7 @@ interface HomeProps {
 
 export const Home: React.FC<HomeProps> = ({}) => {
     const [recentlyPlaylist, setRecentlyPlaylist] = useState([]);
+    const loggedIn = useContext(LoginContext);
     const spotifyApi = new SpotifyWebApi();
     
     // console.log(spotifyApi.getMyRecentlyPlayedTracks());
@@ -38,7 +39,11 @@ export const Home: React.FC<HomeProps> = ({}) => {
     return (
         <div className="page-content">
             <div className='pageContent'>
-                <CollectionRow name='Recently played' id={null} playlists={recentlyPlaylist} />
+                {loggedIn 
+                ? <CollectionRow name='Recently played' id={null} playlists={recentlyPlaylist} />
+                : <div></div>
+                }
+                
             </div>
         </div>
     );
