@@ -62,10 +62,10 @@ export const Home: React.FC<HomeProps> = ({}) => {
                         console.log(err);
                     }
                 )
+
             spotifyApi.getMyTopArtists().
                 then (
                     function(data) {
-                        // console.log(data);
                         data.items.slice(0, 5).map((artist, index) => {
                             setTop(prevTop => ([...prevTop, artist]));
                         });
@@ -74,12 +74,21 @@ export const Home: React.FC<HomeProps> = ({}) => {
                         console.log(err);
                     }
                 )
+            
+            spotifyApi.getCategories().
+                then (
+                    function (data) {
+                        console.log(data)
+                    },
+                    function (err) {
+                        console.log(err)
+                    }
+                )
         }
     }, [])
 
     useEffect(() => { 
         topTracksAndArtists.sort((a, b) => (a.popularity > b.popularity) ? -1 : 1);
-        console.log(topTracksAndArtists) 
     }, [topTracksAndArtists])
 
     return (

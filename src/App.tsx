@@ -4,6 +4,8 @@ import Sidebar from './components/SidebarComponent/Sidebar';
 import { getHashParams } from './utilities/getHashParams';
 import { LoginContext, UserContext, userContext, USER_CONTEXT_DEFAULT, TokenContext } from './utilities/context'
 import { MainPage } from './components/MainPageComponent/MainPage';
+import { Footer } from './components/FooterComponent/Footer';
+import { Banner } from './components/FooterComponent/Banner';
 
 function App() {
   const [token, setToken] = useState("");
@@ -52,16 +54,18 @@ function App() {
     <div className="App">
       <LoginContext.Provider value={loggedIn}>
         <Sidebar playlists={playlists} />
-      </LoginContext.Provider>
 
-      <UserContext.Provider value={user}>
-        <LoginContext.Provider value={loggedIn}>
+        <UserContext.Provider value={user}>
           <TokenContext.Provider value={token}>
             <MainPage />
           </TokenContext.Provider>
-        </LoginContext.Provider>
-      </UserContext.Provider>
-      
+        </UserContext.Provider>
+
+        <Footer>
+          {loggedIn ? null : <Banner />}
+        </Footer>
+        
+      </LoginContext.Provider>
     </div>
   );
 }

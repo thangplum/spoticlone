@@ -7,7 +7,6 @@ interface CollectionTitleProps {
 }
 
 export const CollectionTitle: React.FC<CollectionTitleProps> = ({title, id, description}) => {
-    console.log(description)
     return (
         <>
             <div className="RowTitle">
