@@ -9,9 +9,6 @@ interface HomeProps {
 
 }
 
-interface track {
-
-}
 
 export const Home: React.FC<HomeProps> = ({}) => {
     const [recentlyPlaylist, setRecentlyPlaylist] = useState<SpotifyApi.TrackObjectSimplified[]>([]);
@@ -72,16 +69,6 @@ export const Home: React.FC<HomeProps> = ({}) => {
                     },
                     function(err) {
                         console.log(err);
-                    }
-                )
-            
-            spotifyApi.getCategories().
-                then (
-                    function (data) {
-                        console.log(data)
-                    },
-                    function (err) {
-                        console.log(err)
                     }
                 )
         }

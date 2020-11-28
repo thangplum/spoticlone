@@ -6,6 +6,7 @@ import { LoginContext, UserContext, userContext, USER_CONTEXT_DEFAULT, TokenCont
 import { MainPage } from './components/MainPageComponent/MainPage';
 import { Footer } from './components/FooterComponent/Footer';
 import { Banner } from './components/FooterComponent/Banner';
+import { Player } from './components/FooterComponent/Player'
 
 function App() {
   const [token, setToken] = useState("");
@@ -60,9 +61,9 @@ function App() {
             <MainPage />
           </TokenContext.Provider>
         </UserContext.Provider>
-
+        {/* TODO: Add a functional player */}
         <Footer>
-          {loggedIn ? null : <Banner />}
+          {loggedIn ? <Player /> : <Banner />}
         </Footer>
         
       </LoginContext.Provider>
