@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import SpotifyWebApi from 'spotify-web-api-js';
 import { getHashParams } from '../../utilities/getHashParams';
+import { ControlButton } from './PlayerComponent/ControlButton';
 import { CurrentlyPlayedSong } from './PlayerComponent/CurrentlyPlayedSong';
 
 interface PlayerProps {
@@ -68,6 +69,41 @@ export const Player: React.FC<PlayerProps> = ({}) => {
                 <div className="player">
                     <div className="player-left">
                         <CurrentlyPlayedSong playingSongInfo={recentPlayedSong} /> 
+                    </div>
+                    <div className="player-center">
+                        <div className="player-control-buttons">
+                            <ControlButton
+                                title="Toggle Shuffle"
+                                icon="Shuffle"
+                               
+                            />
+                            <ControlButton
+                                title="Previous"
+                                icon="PrevTrack"
+                                size="x-smaller"
+                                
+                            />
+                            <ControlButton
+                                
+                                title="Pause"
+                                icon="Pause" 
+                                size="smaller" 
+                                extraClass="circle-border"
+                                
+                            />
+                            <ControlButton
+                                title="Next"
+                                icon="NextTrack"
+                                size="x-smaller"
+                                
+                            />
+                            <ControlButton
+                                title="Toggle Repeat"
+                                icon="Repeat"
+                                
+                            />
+                        </div>
+
                     </div>
                 </div> : <></>
             }
