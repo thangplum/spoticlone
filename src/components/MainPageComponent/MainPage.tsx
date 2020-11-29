@@ -4,7 +4,7 @@ import { NavBar } from './NavBar';
 import { Route } from 'react-router-dom'
 import { SearchBar } from './SearchBar';
 import { CollectionHeader } from './CollectionHeader';
-import { LoginContext } from '../../utilities/context';
+import { LinkContext, LoginContext } from '../../utilities/context';
 import UserInfo from './UserInfo';
 import { UserPrompt } from './UserPrompt';
 import { PageContent } from './PageContent';
@@ -16,6 +16,9 @@ interface MainPageProps {
 export const MainPage: React.FC<MainPageProps> = ({}) => {
     const [query, setQuery] = useState("")
     const login = useContext(LoginContext);
+    const link =useContext(LinkContext)
+    const searchPath = link + "/search";
+    const test = "test"
     const resetQuery = () => {
         setQuery("")
     }
@@ -24,10 +27,10 @@ export const MainPage: React.FC<MainPageProps> = ({}) => {
         <div className="featured">
             <NavBar>
                 <HistoryToggle />
-                <Route exact path="/search">
+                <Route exact path={searchPath}>
                     <SearchBar query={query} setQuery={setQuery} resetQuery={resetQuery} />
                 </Route>
-                <Route exact path="/collection">
+                <Route exact path={`${link}/collection`}>
                     <CollectionHeader />
                 </Route>
                 {login ? <UserInfo /> : <UserPrompt />}

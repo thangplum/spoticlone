@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import SpotifyWebApi from 'spotify-web-api-js';
+import { TokenContext } from '../../utilities/context';
 import { getHashParams } from '../../utilities/getHashParams';
+import { ConnectDevices } from './PlayerComponent/ConnectDevices';
 import { ControlButton } from './PlayerComponent/ControlButton';
 import { CurrentlyPlayedSong } from './PlayerComponent/CurrentlyPlayedSong';
 
@@ -11,7 +13,9 @@ interface PlayerProps {
 export const Player: React.FC<PlayerProps> = ({}) => {
     const spotifyApi = new SpotifyWebApi();
     const [recentPlayedSong, setRecentPlayedSong] = useState({});
-
+    const [connectTip, setConnectTip] = useState(false);
+    const [volume, setVolume] = useState(1);
+    const token = useContext(TokenContext);
     useEffect(() => {
         const params = getHashParams();
         const token = params.access_token;
@@ -42,7 +46,6 @@ export const Player: React.FC<PlayerProps> = ({}) => {
             spotifyApi.getMyRecentlyPlayedTracks().
                 then (
                     function(data) {
-                        //console.log(data)
                         setRecentPlayedSong(data.items[0].track);
                     },
                     function(err) {
@@ -103,7 +106,42 @@ export const Player: React.FC<PlayerProps> = ({}) => {
                                 
                             />
                         </div>
+                    </div>
+                    <div className="player-right">
+                        <div className="extra-controls">
+                            <span className="connect-devices-wrapper">
+                                {connectTip && (
+                                    <ConnectDevices
+                                        token={token}
+                                        closeTip={() => setConnectTip(false)}
+                                    />
+                                )}
+                                <ControlButton
+                                    title="Devices"
+                                    icon="Speaker"
+                                    size="x-larger"
+                                    onClick={() => setConnectTip(!connectTip)}
+                                    // active={playbackState.play}
+                                />
+                            </span>
 
+                            <div className="volume-control">
+                                <ControlButton
+                                    title="Volume"
+                                    icon="Volume"
+                                    size="x-larger"
+                                    extraClass="volume"
+                                />
+                                <div style={{ width: "100%" }}>
+                                    {/* <ProgressBar
+                                        extraClass="volume"
+                                        value={volume}
+                                        engageClass="engage"
+                                        setValue={(ratio) => seekVolume(ratio)}
+                                    /> */}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div> : <></>
             }

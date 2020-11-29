@@ -38,6 +38,7 @@ export const Home: React.FC<HomeProps> = ({}) => {
             spotifyApi.getMyRecentlyPlayedTracks().
                 then (
                     function(data) {
+                        console.log(data)
                         const recentlyPlaylistList: SpotifyApi.TrackObjectSimplified[] = [];
                         data.items.map((track, index) => {
                             recentlyPlaylistList.push(track.track as SpotifyApi.TrackObjectSimplified);

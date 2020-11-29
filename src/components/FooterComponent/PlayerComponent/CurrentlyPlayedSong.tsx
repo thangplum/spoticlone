@@ -7,8 +7,6 @@ interface CurrentlyPlayedSongProps {
 }
 
 export const CurrentlyPlayedSong: React.FC<CurrentlyPlayedSongProps> = ({playingSongInfo}) => {
-   
-    console.log(playingSongInfo)
     const {album, artists, name, id} = playingSongInfo
     let imageUrl
     if (album.images && album.images.length !== 0){

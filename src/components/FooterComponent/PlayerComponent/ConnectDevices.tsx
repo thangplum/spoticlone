@@ -1,0 +1,93 @@
+import React, { useEffect, useRef, useState } from 'react'
+import { getHashParams } from '../../../utilities/getHashParams';
+import { ConnectDevicesItem } from './ConnectDevicesItem';
+import SpotifyWebApi from 'spotify-web-api-js';
+interface ConnectDevicesProps {
+    token: string,
+    closeTip: () => void
+}
+
+function useOutsideClick(ref: React.RefObject<HTMLDivElement>, closeTip: () => void) {
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (ref.current && !ref.current.contains(event.target as Node)) {
+                closeTip();
+            }
+        }
+
+        // Bind the event listener
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            // Unbind the event listener on clean up
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [ref]);
+}
+
+export const ConnectDevices: React.FC<ConnectDevicesProps> = ({token, closeTip}) => {
+    const [devices, setDevices] = useState<SpotifyApi.UserDevice[]>([]);
+    const spotifyApi = new SpotifyWebApi();
+
+    useEffect(() => {
+        const params = getHashParams();
+        const token = params.access_token;
+
+        if (token) {
+            spotifyApi.setAccessToken(token);
+
+            spotifyApi.getMyDevices().
+                then (
+                    function(data) {
+                        data.devices.map((device, index) => {
+                            setDevices(devices => [...devices, device])
+                        });
+                    },
+                    function(err) {
+                        console.log(err);
+                    }
+                ) 
+        } 
+    }, [])
+    
+    const switchDevice = () => {
+        console.log("test")
+    };
+
+    const wrapperRef = useRef<HTMLDivElement>(null);
+    useOutsideClick(wrapperRef, closeTip);
+
+    return (
+        <div className="connect-devices" data-source="inside" ref={wrapperRef}>
+			<div className="connect-devices-content" data-source="inside">
+				<div className="connect-devices-title" data-source="inside">
+					<h1 data-source="inside">Connect to a device</h1>
+				</div>
+				<div className="cd-img" data-source="inside">
+					<img
+						loading="lazy"
+						data-source="inside"
+						src="https://open.scdn.co/cdn/images/connect_header@1x.ecc6912d.png"
+						alt=""
+						draggable="false"
+					/>
+				</div>
+
+				{devices.length === 0 ? (
+					<ConnectDevicesItem name="No devices available" disable />
+				) : (
+					<ul className='connect-devices-list'>
+                        {devices.map((device, index) => 
+                            <ConnectDevicesItem
+                                name={device.name}
+                                key={index}
+                                active={device.is_active}
+                                id={device.id}
+                                onClick={switchDevice}
+                            />
+                        )}
+                    </ul>
+				)}
+			</div>
+		</div>
+    );
+}
