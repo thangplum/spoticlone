@@ -49,8 +49,13 @@ export const ConnectDevices: React.FC<ConnectDevicesProps> = ({token, closeTip})
         } 
     }, [])
     
-    const switchDevice = () => {
-        console.log("test")
+    const switchDevice = (e: React.MouseEvent) => {
+        if (!(e.currentTarget instanceof HTMLButtonElement)) {
+            return;
+        }
+        const id = e.currentTarget.dataset.id;
+        const device_ids: string[]= [id as string] ;
+        return spotifyApi.transferMyPlayback(device_ids);
     };
 
     const wrapperRef = useRef<HTMLDivElement>(null);

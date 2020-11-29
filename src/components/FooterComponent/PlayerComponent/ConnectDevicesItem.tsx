@@ -5,7 +5,7 @@ interface ConnectDevicesItemProps {
     disable?: boolean,
     active?: boolean,
     id?: string | null,
-    onClick?: () => void | null
+    onClick?(e: React.MouseEvent): void
 }
 
 export const ConnectDevicesItem: React.FC<ConnectDevicesItemProps> = ({name, disable, active, id, onClick}) => {
