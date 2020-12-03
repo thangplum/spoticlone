@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { CollectionRow } from '../components/MainPageComponent/CollectionRow';
 import SpotifyWebApi from 'spotify-web-api-js';
-import { LoginContext } from '../utilities/context';
+import { LoginContext, TokenContext } from '../utilities/context';
 import { getHashParams } from '../utilities/getHashParams';
 import PrevTrack from '../icons/PrevTrack';
 
@@ -15,13 +15,12 @@ export const Home: React.FC<HomeProps> = ({}) => {
     const [newReleases, setNewReleases] = useState<any[]>([]);
     const [topTracksAndArtists, setTop] = useState<any[]>([]);
     const loggedIn = useContext(LoginContext);
+    const token = useContext(TokenContext);
     const spotifyApi = new SpotifyWebApi();
 
     // console.log(spotifyApi.getMyRecentlyPlayedTracks());
     useEffect(() => {
-        const params = getHashParams();
-        const topTracksAndArtistsList: any[] = []
-        const token = params.access_token;
+        console.log(token)
         if (token) {
             spotifyApi.setAccessToken(token);
 
@@ -78,7 +77,7 @@ export const Home: React.FC<HomeProps> = ({}) => {
     useEffect(() => { 
         topTracksAndArtists.sort((a, b) => (a.popularity > b.popularity) ? -1 : 1);
     }, [topTracksAndArtists])
-
+    
     return (
         <div className="page-content">
             <div className='pageContent'>

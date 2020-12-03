@@ -5,6 +5,7 @@ import { getHashParams } from '../../utilities/getHashParams';
 import { ConnectDevices } from './PlayerComponent/ConnectDevices';
 import { ControlButton } from './PlayerComponent/ControlButton';
 import { CurrentlyPlayedSong } from './PlayerComponent/CurrentlyPlayedSong';
+import { ProgressBar } from './PlayerComponent/ProgressBar';
 
 interface PlayerProps {
 
@@ -65,6 +66,12 @@ export const Player: React.FC<PlayerProps> = ({}) => {
                 )
         }
     }, [])
+
+    const seekVolume = (ratio: number) => {
+        const newVolume = Math.round(ratio * 100);
+        console.log(ratio, newVolume)
+		// spotifyApi.setVolume(newVolume);
+	};
 
     return (
         <>
@@ -133,12 +140,12 @@ export const Player: React.FC<PlayerProps> = ({}) => {
                                     extraClass="volume"
                                 />
                                 <div style={{ width: "100%" }}>
-                                    {/* <ProgressBar
+                                    <ProgressBar
                                         extraClass="volume"
                                         value={volume}
                                         engageClass="engage"
                                         setValue={(ratio) => seekVolume(ratio)}
-                                    /> */}
+                                    />
                                 </div>
                             </div>
                         </div>

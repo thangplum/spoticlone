@@ -1,5 +1,6 @@
-import React, { useContext, useState } from 'react'
-import {UserContext} from '../../utilities/context'
+import React, { useContext, useState } from 'react';
+import {UserContext} from '../../utilities/context';
+import axios from 'axios';
 
 interface UserInfoProps {
 
@@ -11,6 +12,14 @@ const UserInfo: React.FC<UserInfoProps> = ({}) => {
     let img_url;
     if (images.length > 0) {
         img_url = images[0].url
+    }
+
+    const logout = () => {
+        axios(`${process.env.REACT_APP_BACK_URI}/logout`, {withCredentials: true})
+            .then(response => {
+                window.location.reload()
+            })
+            .catch(error => console.log(error))
     }
 
     return (
@@ -34,7 +43,7 @@ const UserInfo: React.FC<UserInfoProps> = ({}) => {
                     <a href={`/user/${id}`}>Profile</a>
                 </li>
                 <li>
-                    <button>Log out</button>
+                    <button onClick={logout}>Log out</button>
                 </li>
             </ul>
         </div>

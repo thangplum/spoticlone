@@ -16,9 +16,6 @@ interface MainPageProps {
 export const MainPage: React.FC<MainPageProps> = ({}) => {
     const [query, setQuery] = useState("")
     const login = useContext(LoginContext);
-    const link =useContext(LinkContext)
-    const searchPath = link + "/search";
-    const test = "test"
     const resetQuery = () => {
         setQuery("")
     }
@@ -27,10 +24,10 @@ export const MainPage: React.FC<MainPageProps> = ({}) => {
         <div className="featured">
             <NavBar>
                 <HistoryToggle />
-                <Route exact path={searchPath}>
+                <Route exact path='/search'>
                     <SearchBar query={query} setQuery={setQuery} resetQuery={resetQuery} />
                 </Route>
-                <Route exact path={`${link}/collection`}>
+                <Route exact path='/collection'>
                     <CollectionHeader />
                 </Route>
                 {login ? <UserInfo /> : <UserPrompt />}

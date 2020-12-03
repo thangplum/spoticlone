@@ -1,8 +1,6 @@
-import React from 'react'
-
 type param = {
     access_token: string,
-    link: string
+    error: string
 }
 
 export function getHashParams() {
@@ -16,6 +14,5 @@ export function getHashParams() {
       hashParams[e[1] as keyof param] = decodeURIComponent(e[2]);
       e = r.exec(q);
     }
-    hashParams.link = q;
     return hashParams;
 }
