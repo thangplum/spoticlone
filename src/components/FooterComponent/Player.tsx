@@ -8,19 +8,16 @@ import { CurrentlyPlayedSong } from './PlayerComponent/CurrentlyPlayedSong';
 import { ProgressBar } from './PlayerComponent/ProgressBar';
 
 interface PlayerProps {
-
+    token: string
 }
 
-export const Player: React.FC<PlayerProps> = ({}) => {
+export const Player: React.FC<PlayerProps> = ({token}) => {
     const spotifyApi = new SpotifyWebApi();
     const [recentPlayedSong, setRecentPlayedSong] = useState({});
     const [connectTip, setConnectTip] = useState(false);
     const [volume, setVolume] = useState(1);
-    const token = useContext(TokenContext);
-    useEffect(() => {
-        const params = getHashParams();
-        const token = params.access_token;
 
+    useEffect(() => {
         if (token) {
             spotifyApi.setAccessToken(token);
 

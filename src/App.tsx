@@ -55,11 +55,9 @@ function App() {
       } else {
         Axios(`${process.env.REACT_APP_BACK_URI}/refresh_token`, {withCredentials: true})
           .then((response) => {
-            
             const access_token = response.data.access_token
             setToken(access_token);
             setLogin(true);
-            //console.log(token);
             spotifyApi.setAccessToken(access_token);
             spotifyApi.getUserPlaylists().
               then(
@@ -76,6 +74,7 @@ function App() {
               .then(
                 function(data) {
                   //cast response type to local type
+                  console.log(data);
                   setUser(data as userContext);
                 },
                 function(err) {
@@ -106,13 +105,12 @@ function App() {
 
         <UserContext.Provider value={user}>
           <TokenContext.Provider value={token}>
-            {console.log(token)}
             <MainPage />
           </TokenContext.Provider>
         </UserContext.Provider>
         {/* TODO: Add a functional player */}
         <Footer>
-          {loggedIn ? <Player /> : <Banner />}
+          {loggedIn ? <Player token={token} /> : <Banner />}
         </Footer>
       </LoginContext.Provider>
     </div>
