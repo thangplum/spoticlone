@@ -584,6 +584,7 @@ body{
 
 .connect-devices-list {
     margin: 0 -5px -5px;
+    width: 100%;
 }
 
 .connect-devices-items {

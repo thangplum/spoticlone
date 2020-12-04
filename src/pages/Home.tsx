@@ -86,6 +86,10 @@ export const Home: React.FC<HomeProps> = ({}) => {
         }
     }, [token])
 
+    useEffect(() => { 
+        topTracksAndArtists.sort((a, b) => (a.popularity > b.popularity) ? -1 : 1);
+    }, [topTracksAndArtists])
+
     useEffect(() => {
         collections.map((collection) => {
             const {name, id} = collection
@@ -99,10 +103,6 @@ export const Home: React.FC<HomeProps> = ({}) => {
             return null
         })
     }, [collections])
-
-    useEffect(() => { 
-        topTracksAndArtists.sort((a, b) => (a.popularity > b.popularity) ? -1 : 1);
-    }, [topTracksAndArtists])
     
     useEffect(() => {
         setFpPlaylists({...fpPlaylists, ...tempPlaylists});

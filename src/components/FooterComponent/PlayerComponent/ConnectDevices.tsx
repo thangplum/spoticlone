@@ -29,9 +29,6 @@ export const ConnectDevices: React.FC<ConnectDevicesProps> = ({token, closeTip})
     const spotifyApi = new SpotifyWebApi();
 
     useEffect(() => {
-        const params = getHashParams();
-        const token = params.access_token;
-
         if (token) {
             spotifyApi.setAccessToken(token);
 
@@ -54,8 +51,9 @@ export const ConnectDevices: React.FC<ConnectDevicesProps> = ({token, closeTip})
             return;
         }
         const id = e.currentTarget.dataset.id;
-        const device_ids: string[]= [id as string] ;
-        return spotifyApi.transferMyPlayback(device_ids);
+        const device_ids: string[]= [id as string];
+        spotifyApi.setAccessToken(token);
+        spotifyApi.transferMyPlayback(device_ids);
     };
 
     const wrapperRef = useRef<HTMLDivElement>(null);

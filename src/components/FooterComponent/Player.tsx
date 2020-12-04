@@ -55,7 +55,6 @@ export const Player: React.FC<PlayerProps> = ({token}) => {
                 then (
                     function(data) {
                         console.log(data)
-                        
                     },
                     function(err) {
                         console.log(err);
@@ -66,8 +65,15 @@ export const Player: React.FC<PlayerProps> = ({token}) => {
 
     const seekVolume = (ratio: number) => {
         const newVolume = Math.round(ratio * 100);
-        console.log(ratio, newVolume)
-		// spotifyApi.setVolume(newVolume);
+        console.log(ratio, newVolume);
+        setVolume(ratio);
+        // Sync volume with playbaclon active device
+        // spotifyApi.setAccessToken(token);
+        // spotifyApi.setVolume(newVolume)
+		// 	.then((response) => {
+		// 		console.log(response);
+		// 	})
+		// 	.catch((error) => console.log(error));
 	};
 
     return (
