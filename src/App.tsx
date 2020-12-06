@@ -3,12 +3,16 @@ import Axios from 'axios';
 import SpotifyWebApi from 'spotify-web-api-js';
 import Sidebar from './components/SidebarComponent/Sidebar';
 import { getHashParams } from './utilities/getHashParams';
-import { LoginContext, UserContext, userContext, USER_CONTEXT_DEFAULT, TokenContext, LinkContext } from './utilities/context'
+import { LoginContext, UserContext, userContext, USER_CONTEXT_DEFAULT, TokenContext, LinkContext, MessageContext } from './utilities/context'
 import { MainPage } from './components/MainPageComponent/MainPage';
 import { Footer } from './components/FooterComponent/Footer';
 import { Banner } from './components/FooterComponent/Banner';
 import { Player } from './components/FooterComponent/Player';
 import { Loading } from './components/MainPageComponent/Loading';
+
+type PlayerHandle = {
+  updateState: () => void
+}
 
 function App() {
   const [loading, setLoading] = useState(true)
@@ -16,10 +20,15 @@ function App() {
   const [loggedIn, setLogin] = useState(false);
   const [user, setUser] = useState<userContext>(USER_CONTEXT_DEFAULT)
   const [playlists, setPlaylists] = useState<SpotifyApi.PlaylistObjectSimplified[]>([]);
+
+  const [status, setStatus] = useState(false);
+  const [message, setMessage] = useState('');
+
+  const timerRef = useRef(0);
+
   const spotifyApi = new SpotifyWebApi();
 
   useEffect(() => {
-    
     const params = getHashParams();
     const access_token = params.access_token;
     const error = params.error;
@@ -94,8 +103,27 @@ function App() {
       }
     }
 
-    return ;
+    return (() => {
+      clearTimeout(timerRef.current);
+    });
   }, [])
+
+  const playerRef = useRef<PlayerHandle>(null);
+
+  const updatePlayer = () => {
+    if (playerRef.current) {
+      playerRef.current.updateState();
+    }
+  }
+
+  const setStatusMessage = (message: string) => {
+    clearTimeout(timerRef.current)
+    setStatus(true)
+    setMessage(message)
+    timerRef.current = window.setTimeout(() => {
+      setStatus(false)
+    }, 3000)
+  }
   
   // TODO: 
   // 2. Continue to do player
@@ -103,18 +131,20 @@ function App() {
       <div className="App">
         {loading 
           ? <Loading type='app' />
-          : <LoginContext.Provider value={loggedIn}>
-              <Sidebar playlists={playlists} />
-              <UserContext.Provider value={user}>
-                <TokenContext.Provider value={token}>
-                  <MainPage />
-                </TokenContext.Provider>
-              </UserContext.Provider>
-              {/* TODO: Add a functional player */}
-              <Footer>
-                {loggedIn ? <Player token={token} /> : <Banner />}
-              </Footer>
-            </LoginContext.Provider>
+          : <MessageContext.Provider value={setStatusMessage}>
+              <LoginContext.Provider value={loggedIn}>
+                <Sidebar playlists={playlists} />
+                <UserContext.Provider value={user}>
+                  <TokenContext.Provider value={token}>
+                    <MainPage message={message} status={status} />
+                  </TokenContext.Provider>
+                </UserContext.Provider>
+                {/* TODO: Add a functional player */}
+                <Footer>
+                  {loggedIn ? <Player token={token} ref={playerRef} /> : <Banner />}
+                </Footer>
+              </LoginContext.Provider>
+            </MessageContext.Provider>
         }
       </div>
   );

@@ -10,12 +10,14 @@ import { UserPrompt } from './UserPrompt';
 import { PageContent } from './PageContent';
 
 interface MainPageProps {
-
+    message: string,
+    status: boolean
 }
 
-export const MainPage: React.FC<MainPageProps> = ({}) => {
+export const MainPage: React.FC<MainPageProps> = ({message, status}) => {
     const [query, setQuery] = useState("")
     const login = useContext(LoginContext);
+    
     const resetQuery = () => {
         setQuery("")
     }
@@ -32,7 +34,7 @@ export const MainPage: React.FC<MainPageProps> = ({}) => {
                 </Route>
                 {login ? <UserInfo /> : <UserPrompt />}
             </NavBar>
-            <PageContent query={query} />
+            <PageContent query={query} message={message} status={status}  />
         </div>
         
     );
