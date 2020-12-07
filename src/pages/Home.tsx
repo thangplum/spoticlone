@@ -4,7 +4,6 @@ import SpotifyWebApi from 'spotify-web-api-js';
 import { LoginContext, TokenContext } from '../utilities/context';
 import getLocale from '../utilities/locale';
 import createRequest from '../utilities/createRequest';
-import { create } from 'domain';
 
 interface HomeProps {
 
@@ -77,6 +76,7 @@ export const Home: React.FC<HomeProps> = ({}) => {
 
             makeRequest()
                 .then((data: any) => {
+                    console.log(data)
                     setCollections(data.categories.items);
                 })
                 .catch((error: any) => console.log(error))
@@ -106,8 +106,6 @@ export const Home: React.FC<HomeProps> = ({}) => {
     
     useEffect(() => {
         setFpPlaylists({...fpPlaylists, ...tempPlaylists});
-        // setFpPlaylists([...fpPlaylists, tempPlaylists]);
-    // eslint-disable-next-line
     }, [tempPlaylists])
 
     return (

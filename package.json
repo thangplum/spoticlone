@@ -15,6 +15,7 @@
     "axios": "^0.20.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-heartbeat": "^1.0.0",
     "react-load-script": "0.0.6",
     "react-loader-spinner": "^3.1.14",
     "react-redux": "^7.2.1",

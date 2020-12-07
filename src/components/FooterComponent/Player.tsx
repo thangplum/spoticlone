@@ -10,7 +10,9 @@ import {
     SpotifyPlayerCallback,
     WebPlaybackError,
     WebPlaybackPlayer
-} from '../../utilities/types/spotify'
+} from '../../utilities/types';
+import timeFormat from '../../utilities/timeFormat';
+import Heartbeat from "react-heartbeat";
 
 interface PlayerProps {
     token: string,
@@ -23,7 +25,7 @@ type PlayerHandle = {
 export const Player = forwardRef((props: PlayerProps, ref: Ref<PlayerHandle>) => {
     const { token } = props;
     const spotifyApi = new SpotifyWebApi();
-    const [recentPlayedSong, setRecentPlayedSong] = useState({});
+    const [currPb, setCurrPb] = useState(0);
     const [connectTip, setConnectTip] = useState(false);
     const [volume, setVolume] = useState(1);
     const [playbackState, setPlaybackState] = useState({
@@ -40,9 +42,18 @@ export const Player = forwardRef((props: PlayerProps, ref: Ref<PlayerHandle>) =>
 		name: "",
 		id: "",
     });
+    const [recentlyPlayedTrack, setRecentlyPlayedTrack] = useState<any>({
+        album: {},
+        artists: [],
+        name: "",
+        id: "",
+        duration_ms: 0
+    });
+    const [deviceId, setDeviceId] = useState("")
     
     const timerRef = useRef(0);
     let player : WebPlaybackPlayer;
+    let displayPlayer = useRef(null);
 
     const setMessage = useContext(MessageContext);
 
@@ -55,20 +66,23 @@ export const Player = forwardRef((props: PlayerProps, ref: Ref<PlayerHandle>) =>
 		apiUpdate();
 
         window.onSpotifyWebPlaybackSDKReady = () => playerInitialize();
-        
+
         if (token) {
             spotifyApi.setAccessToken(token);  
             
             spotifyApi.getMyRecentlyPlayedTracks().
                 then (
                     function(data) {
-                        setRecentPlayedSong(data.items[0].track);
+                        console.log(data.items[0].track)
+                        setRecentlyPlayedTrack(data.items[0].track);
+                        //setRecentTrackTotalTime(data.items[0].track.duration_ms)
                     },
                     function(err) {
                         console.log(err);
                     }
                 )
         }
+
         return () => {
 			clearTimeout(timerRef.current);
 			player.disconnect();
@@ -76,7 +90,6 @@ export const Player = forwardRef((props: PlayerProps, ref: Ref<PlayerHandle>) =>
     }, [])
 
     const loadScript = () => {
-        console.log("test")
 		const script = document.createElement("script");
 
 		script.id = "spotify-player";
@@ -145,12 +158,13 @@ export const Player = forwardRef((props: PlayerProps, ref: Ref<PlayerHandle>) =>
 
 		// Ready
 		player.addListener("ready", ({ device_id }) => {
-			console.log("Ready with Device ID", device_id);
-			const tipAccess = localStorage.getItem("tipAccess");
+            const tipAccess = localStorage.getItem("tipAccess");
+            console.log(device_id);
 			if (!tipAccess) {
 				localStorage.setItem("tipAccess", "true");
 				setConnectTip(true);
-			}
+            }
+            setDeviceId(device_id);
 		});
 
 		// Not Ready
@@ -173,7 +187,7 @@ export const Player = forwardRef((props: PlayerProps, ref: Ref<PlayerHandle>) =>
 
     //Use for other components to update the player state only if not connected to the web player
     const updateState = () => {
-        if (!player.getCurrentState) {
+        if (!displayPlayer.current && !player) {
             apiUpdate();
         }
     };
@@ -188,7 +202,7 @@ export const Player = forwardRef((props: PlayerProps, ref: Ref<PlayerHandle>) =>
                 function(data) {
                     if (Object.keys(data).length === 0) {
                         setMessage("There is no active device");
-                        setConnectTip(true);
+                        // setConnectTip(true);
                     } else {
                         console.log(data);
                         const {
@@ -231,7 +245,17 @@ export const Player = forwardRef((props: PlayerProps, ref: Ref<PlayerHandle>) =>
 		const interval = 500 / playbackState.total_time;
 		setPlayback((playback) => playback + interval);
 		setPlaybackState((state) => ({ ...state, progress: state.progress + 500 }));
-	};
+    };
+    
+    const syncPlayback = (ratio: number) => {
+        const currTime = Math.round(ratio * playbackState.total_time);
+        spotifyApi.setAccessToken(token);
+        spotifyApi.seek(currTime)
+            .then((response) => {
+                console.log(response);
+            })
+            .catch((error) => console.log(error));
+    }
 
     const syncVolume = (ratio: number) => {
         const newVolume = Math.round(ratio * 100);
@@ -257,98 +281,122 @@ export const Player = forwardRef((props: PlayerProps, ref: Ref<PlayerHandle>) =>
             })
     }
 
-    const handleScriptCreate = () => {
-        console.log("Script created");
-    }
-    
-    const handleScriptError = () => {
-        console.log("Script error");
-    }
-    
-    const handleScriptLoad = () => {
-        console.log("Script loaded");
+    const prev = () => {
+        spotifyApi.setAccessToken(token);
+        spotifyApi.skipToPrevious()
+            .then ((response) => {
+                console.log(player)
+                // updateState();
+                // player.previousTrack();
+                apiUpdate();
+            })
+            .catch ((error) => {
+                console.log(error);
+            })
     }
 
     return (
         <>
-            {Object.keys(recentPlayedSong).length !== 0 ? 
-                <div className="player">
-                    <div className="player-left">
-                        <CurrentlyPlayedSong playingSongInfo={recentPlayedSong} /> 
+            {playbackState.play ? (
+				<Heartbeat heartbeatFunction={updatePlayback} heartbeatInterval={500} />
+			) : null}
+            <div className="player">
+                <div className="player-left">
+                    <CurrentlyPlayedSong playingSongInfo={playInfo.name !== "" ? playInfo : recentlyPlayedTrack} /> 
+                </div>
+                <div className="player-center">
+                    <div className="player-control-buttons">
+                        <ControlButton
+                            title="Toggle Shuffle"
+                            icon="Shuffle"
+                            active={playbackState.shuffle}
+                            onClick={toggleShuffle}
+                        />
+                        <ControlButton
+                            title="Previous"
+                            icon="PrevTrack"
+                            size="x-smaller"
+                            onClick={prev}
+                        />
+                        <ControlButton
+                            
+                            title="Play"
+                            icon="Play" 
+                            size="smaller" 
+                            extraClass="circle-border"
+                            
+                        />
+                        <ControlButton
+                            title="Next"
+                            icon="NextTrack"
+                            size="x-smaller"
+                            
+                        />
+                        <ControlButton
+                            title="Toggle Repeat"
+                            icon="Repeat"
+                            
+                        />
                     </div>
-                    <div className="player-center">
-                        <div className="player-control-buttons">
-                            <ControlButton
-                                title="Toggle Shuffle"
-                                icon="Shuffle"
-                                active={playbackState.shuffle}
-                                onClick={toggleShuffle}
-                            />
-                            <ControlButton
-                                title="Previous"
-                                icon="PrevTrack"
-                                size="x-smaller"
-                                
-                            />
-                            <ControlButton
-                                
-                                title="Pause"
-                                icon="Pause" 
-                                size="smaller" 
-                                extraClass="circle-border"
-                                
-                            />
-                            <ControlButton
-                                title="Next"
-                                icon="NextTrack"
-                                size="x-smaller"
-                                
-                            />
-                            <ControlButton
-                                title="Toggle Repeat"
-                                icon="Repeat"
-                                
-                            />
+                    <div className="player-playback" draggable="false">
+                        <div className="playback-time" draggable="false">
+                            {currPb
+                                ? timeFormat(currPb)
+                                : timeFormat(playbackState.progress)
+                            }
+                        </div>
+                        <ProgressBar
+                            extraClass="playback"
+                            value={playback}
+                            engageClass="engage"
+                            setValue={(ratio) => syncPlayback(ratio)}
+                            //scrubFunction={scrubPlayback}
+                        />
+                        <div className="playback-time" draggable="false">
+                            {playbackState.total_time !== 0
+                                ? timeFormat(playbackState.total_time)
+                                : timeFormat(recentlyPlayedTrack.duration_ms)
+                            }
                         </div>
                     </div>
-                    <div className="player-right">
-                        <div className="extra-controls">
-                            <span className="connect-devices-wrapper">
-                                {connectTip && (
-                                    <ConnectDevices
-                                        token={token}
-                                        closeTip={() => setConnectTip(false)}
-                                    />
-                                )}
-                                <ControlButton
-                                    title="Devices"
-                                    icon="Speaker"
-                                    size="x-larger"
-                                    onClick={() => setConnectTip(!connectTip)}
-                                    // active={playbackState.play}
+                </div>
+                <div className="player-right">
+                    <div className="extra-controls">
+                        <span className="connect-devices-wrapper">
+                            {connectTip && (
+                                <ConnectDevices
+                                    token={token}
+                                    closeTip={() => setConnectTip(false)}
                                 />
-                            </span>
+                            )}
+                            <ControlButton
+                                title="Devices"
+                                icon="Devices"
+                                size="x-larger"
+                                onClick={() => setConnectTip(!connectTip)}
+                                active={playbackState.play}
+                            />
+                        </span>
 
-                            <div className="volume-control">
-                                <ControlButton
-                                    title="Volume"
-                                    icon="Volume"
-                                    size="x-larger"
+                        <div className="volume-control">
+                            <ControlButton
+                                title="Volume"
+                                icon="Volume"
+                                size="x-larger"
+                                extraClass="volume"
+                            />
+                            <div style={{ width: "100%" }}>
+                                <ProgressBar
                                     extraClass="volume"
+                                    value={volume}
+                                    engageClass="engage"
+                                    setValue={(ratio) => syncVolume(ratio)}
                                 />
-                                <div style={{ width: "100%" }}>
-                                    <ProgressBar
-                                        extraClass="volume"
-                                        value={volume}
-                                        engageClass="engage"
-                                        setValue={(ratio) => syncVolume(ratio)}
-                                    />
-                                </div>
                             </div>
                         </div>
                     </div>
-                </div> : <></>
-            }
+                </div>
+            </div> 
         </>
     );
 })

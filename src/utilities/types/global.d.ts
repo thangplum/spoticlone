@@ -3,5 +3,7 @@ declare global {
       onSpotifyWebPlaybackSDKReady?: () => void;
     }
 }
+
+
   
 export {};

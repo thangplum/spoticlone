@@ -1,6 +1,5 @@
 import React from 'react';
 import Icon from '../../../icons';
-import SpotifyWebApi from 'spotify-web-api-js';
 
 interface CurrentlyPlayedSongProps {
     playingSongInfo: any

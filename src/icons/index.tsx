@@ -16,11 +16,12 @@ import PrevTrack from './PrevTrack'
 import NextTrack from './NextTrack'
 import Shuffle from './Shuffle'
 import Repeat from './Repeat'
-import Speaker from './Speaker'
+import Speaker from './Devices'
 import Volume from './Volume'
 import Pause from './Pause'
 
 import React from 'react'
+import Devices from './Devices'
 
 
 export default function Icon(props: any) {
@@ -61,8 +62,8 @@ export default function Icon(props: any) {
             return <Shuffle />
         case 'Repeat':
             return <Repeat />
-        case 'Speaker':
-            return <Speaker />
+        case 'Devices':
+            return <Devices />
         case 'Volume':
             return <Volume />
         case 'Pause':
