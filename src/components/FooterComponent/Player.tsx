@@ -257,6 +257,7 @@ export const Player = forwardRef((props: PlayerProps, ref: Ref<PlayerHandle>) =>
             .catch((error) => {
                 setMessage(`ERROR: ${error}`);
             });
+        setCurrPb(0);
     }
 
     const syncVolume = (ratio: number) => {
@@ -364,6 +365,11 @@ export const Player = forwardRef((props: PlayerProps, ref: Ref<PlayerHandle>) =>
         }
     }
 
+    const scrubPlayback = (ratio: number) => {
+		const time = ratio * playbackState.total_time;
+		setCurrPb(time);
+	};
+
     return (
         <>
             {playbackState.play ? (
@@ -418,7 +424,7 @@ export const Player = forwardRef((props: PlayerProps, ref: Ref<PlayerHandle>) =>
                             value={playback}
                             engageClass="engage"
                             setValue={(ratio) => syncPlayback(ratio)}
-                            //scrubFunction={scrubPlayback}
+                            scrubFunction={scrubPlayback}
                         />
                         <div className="playback-time" draggable="false">
                             {playbackState.total_time !== 0
