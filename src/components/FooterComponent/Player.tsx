@@ -31,7 +31,7 @@ export const Player = forwardRef((props: PlayerProps, ref: Ref<PlayerHandle>) =>
     const [playbackState, setPlaybackState] = useState({
 		play: false,
 		shuffle: false,
-		repeat: false,
+		repeat: "off",
 		progress: 0,
 		total_time: 0,
     });
@@ -127,9 +127,10 @@ export const Player = forwardRef((props: PlayerProps, ref: Ref<PlayerHandle>) =>
 
 		// Playback status updates
 		player.addListener("player_state_changed", (state) => {
-			console.log(state);
+			
 			try {
                 if (state) {
+                    console.log(state);
                     const {
                         duration,
                         position,
@@ -146,7 +147,7 @@ export const Player = forwardRef((props: PlayerProps, ref: Ref<PlayerHandle>) =>
                         ...state,
                         play: !paused,
                         shuffle: shuffle,
-                        repeat: repeat_mode !== 0,
+                        repeat: repeat_mode === 0 ? "off" : (repeat_mode === 1 ? "context" : "track"),
                         progress: position,
                         total_time: duration,
                     }));
@@ -159,7 +160,6 @@ export const Player = forwardRef((props: PlayerProps, ref: Ref<PlayerHandle>) =>
 		// Ready
 		player.addListener("ready", ({ device_id }) => {
             const tipAccess = localStorage.getItem("tipAccess");
-            console.log(device_id);
 			if (!tipAccess) {
 				localStorage.setItem("tipAccess", "true");
 				setConnectTip(true);
@@ -226,7 +226,7 @@ export const Player = forwardRef((props: PlayerProps, ref: Ref<PlayerHandle>) =>
                             ...playbackState,
                             play: is_playing,
                             shuffle: shuffle_state,
-                            repeat: repeat_state !== "off",
+                            repeat: repeat_state,
                             progress: progress_ms === null ? 0 : progress_ms,
                             total_time: item!.duration_ms,
                         });
@@ -254,7 +254,9 @@ export const Player = forwardRef((props: PlayerProps, ref: Ref<PlayerHandle>) =>
             .then((response) => {
                 console.log(response);
             })
-            .catch((error) => console.log(error));
+            .catch((error) => {
+                setMessage(`ERROR: ${error}`);
+            });
     }
 
     const syncVolume = (ratio: number) => {
@@ -266,18 +268,20 @@ export const Player = forwardRef((props: PlayerProps, ref: Ref<PlayerHandle>) =>
                 setVolume(ratio);
 				console.log(response);
 			})
-			.catch((error) => console.log(error));
+			.catch((error) => {
+                setMessage(`ERROR: ${error}`);
+            });
     };
     
-    const toggleShuffle = () => {
+    const shuffle = () => {
         spotifyApi.setAccessToken(token);
         spotifyApi.setShuffle(!playbackState.shuffle)
             .then ((response) => {
-                console.log(response);
-                setPlaybackState((state) => ({ ...state, shuffle: !state.shuffle }));
+				setPlaybackState((state) => ({ ...state, shuffle: !state.shuffle }));
+				updateState();
             })
             .catch ((error) => {
-                console.log(error);
+                setMessage(`ERROR: ${error}`);
             })
     }
 
@@ -285,14 +289,79 @@ export const Player = forwardRef((props: PlayerProps, ref: Ref<PlayerHandle>) =>
         spotifyApi.setAccessToken(token);
         spotifyApi.skipToPrevious()
             .then ((response) => {
-                console.log(player)
-                // updateState();
-                // player.previousTrack();
                 apiUpdate();
             })
             .catch ((error) => {
-                console.log(error);
+                setMessage(`ERROR: ${error}`);
             })
+    }
+
+    const next = () => {
+        spotifyApi.setAccessToken(token);
+        spotifyApi.skipToNext()
+            .then((response) => {
+                apiUpdate();
+            })
+            .catch((error) => {
+                setMessage(`ERROR: ${error}`);
+            })
+    }
+
+    const play = () => {
+        spotifyApi.setAccessToken(token);
+        if (playbackState.play) {
+            spotifyApi.pause()
+                .then((response) => {
+                    setPlaybackState((state) => ({ ...state, play: !state.play }));
+					updateState();
+                })
+                .catch((error) => {
+                    setMessage(`ERROR: ${error}`);
+                })
+        } else {
+            spotifyApi.play()
+                .then((response) => {
+                    setPlaybackState((state) => ({ ...state, play: !state.play }));
+                    updateState();
+                })
+                .catch((error) => {
+                    setMessage(`ERROR: ${error}`);
+                })
+        }
+    }
+
+    const repeat = () => {
+        console.log(playbackState.repeat);
+        spotifyApi.setAccessToken(token);
+        if (playbackState.repeat === "off"){
+            spotifyApi.setRepeat('context')
+                .then((response) => {
+                    setPlaybackState((state) => ({ ...state, repeat: "context" }));
+					updateState();
+                })
+                .then((error) => {
+                    setMessage(`ERROR: ${error}`);
+                })
+        } else if (playbackState.repeat === "context"){
+            spotifyApi.setRepeat('track')
+                .then((response) => {
+                    setPlaybackState((state) => ({ ...state, repeat: "track" }));
+					updateState();
+                })
+                .then((error) => {
+                    setMessage(`ERROR: ${error}`);
+                })
+        } else if (playbackState.repeat === "track"){
+            console.log("test")
+            spotifyApi.setRepeat('off')
+                .then((response) => {
+                    setPlaybackState((state) => ({ ...state, repeat: "off" }));
+                    updateState();
+                })
+                .then((error) => {
+                    setMessage(`ERROR: ${error}`);
+                })
+        }
     }
 
     return (
@@ -310,7 +379,7 @@ export const Player = forwardRef((props: PlayerProps, ref: Ref<PlayerHandle>) =>
                             title="Toggle Shuffle"
                             icon="Shuffle"
                             active={playbackState.shuffle}
-                            onClick={toggleShuffle}
+                            onClick={shuffle}
                         />
                         <ControlButton
                             title="Previous"
@@ -319,23 +388,22 @@ export const Player = forwardRef((props: PlayerProps, ref: Ref<PlayerHandle>) =>
                             onClick={prev}
                         />
                         <ControlButton
-                            
-                            title="Play"
-                            icon="Play" 
-                            size="smaller" 
+                            title={playbackState.play ? "Pause" : "Play"}
+							icon={playbackState.play ? "Pause" : "Play"}
+							size={playbackState.play ? "smaller" : "larger"} 
                             extraClass="circle-border"
-                            
+                            onClick={play}
                         />
                         <ControlButton
                             title="Next"
                             icon="NextTrack"
                             size="x-smaller"
-                            
+                            onClick={next}
                         />
                         <ControlButton
                             title="Toggle Repeat"
                             icon="Repeat"
-                            
+                            onClick={repeat}
                         />
                     </div>
                     <div className="player-playback" draggable="false">
