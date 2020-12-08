@@ -1,7 +1,7 @@
 import React from 'react'
 
 interface PromptButtonProps {
-    to: string,
+    to?: string,
     name: string,
     styleName: string,
     onClick?: any
