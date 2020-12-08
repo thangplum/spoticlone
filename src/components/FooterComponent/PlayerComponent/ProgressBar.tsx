@@ -77,8 +77,10 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({extraClass, value, enga
     const handleMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         setIsDragging(true);
         if (wrapperRef.current) {
+            
             const rect = wrapperRef.current.getBoundingClientRect();
-            const offsetRatio = (e.pageX - rect.x)/rect.width
+            const offsetRatio = (e.pageX - rect.x)/rect.width;
+            console.log(offsetRatio);
             setScrub(offsetRatio)
         }
         

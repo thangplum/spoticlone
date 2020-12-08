@@ -49,7 +49,6 @@ export const Player = forwardRef((props: PlayerProps, ref: Ref<PlayerHandle>) =>
         id: "",
         duration_ms: 0
     });
-    const [deviceId, setDeviceId] = useState("")
     
     const timerRef = useRef(0);
     let player : WebPlaybackPlayer;
@@ -73,7 +72,6 @@ export const Player = forwardRef((props: PlayerProps, ref: Ref<PlayerHandle>) =>
             spotifyApi.getMyRecentlyPlayedTracks().
                 then (
                     function(data) {
-                        console.log(data.items[0].track)
                         setRecentlyPlayedTrack(data.items[0].track);
                         //setRecentTrackTotalTime(data.items[0].track.duration_ms)
                     },
@@ -102,7 +100,6 @@ export const Player = forwardRef((props: PlayerProps, ref: Ref<PlayerHandle>) =>
 	};
 
     const playerInitialize = () => {
-        console.log("player init");
         // @ts-ignore
 		player = new window.Spotify.Player({
 			name: "Spotify Clone Player",
@@ -164,7 +161,6 @@ export const Player = forwardRef((props: PlayerProps, ref: Ref<PlayerHandle>) =>
 				localStorage.setItem("tipAccess", "true");
 				setConnectTip(true);
             }
-            setDeviceId(device_id);
 		});
 
 		// Not Ready
@@ -204,7 +200,6 @@ export const Player = forwardRef((props: PlayerProps, ref: Ref<PlayerHandle>) =>
                         setMessage("There is no active device");
                         // setConnectTip(true);
                     } else {
-                        console.log(data);
                         const {
                             repeat_state,
 						    shuffle_state,
@@ -252,12 +247,15 @@ export const Player = forwardRef((props: PlayerProps, ref: Ref<PlayerHandle>) =>
         spotifyApi.setAccessToken(token);
         spotifyApi.seek(currTime)
             .then((response) => {
-                console.log(response);
+                setPlayback(ratio);
+				setPlaybackState((state) => ({ ...state, progress: currTime }));
+				updateState();
             })
             .catch((error) => {
                 setMessage(`ERROR: ${error}`);
             });
         setCurrPb(0);
+        console.log(playbackState);
     }
 
     const syncVolume = (ratio: number) => {
@@ -267,7 +265,6 @@ export const Player = forwardRef((props: PlayerProps, ref: Ref<PlayerHandle>) =>
         spotifyApi.setVolume(newVolume)
 			.then((response) => {
                 setVolume(ratio);
-				console.log(response);
 			})
 			.catch((error) => {
                 setMessage(`ERROR: ${error}`);
@@ -332,7 +329,6 @@ export const Player = forwardRef((props: PlayerProps, ref: Ref<PlayerHandle>) =>
     }
 
     const repeat = () => {
-        console.log(playbackState.repeat);
         spotifyApi.setAccessToken(token);
         if (playbackState.repeat === "off"){
             spotifyApi.setRepeat('context')
@@ -414,7 +410,7 @@ export const Player = forwardRef((props: PlayerProps, ref: Ref<PlayerHandle>) =>
                     </div>
                     <div className="player-playback" draggable="false">
                         <div className="playback-time" draggable="false">
-                            {currPb
+                            {currPb > 0
                                 ? timeFormat(currPb)
                                 : timeFormat(playbackState.progress)
                             }

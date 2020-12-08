@@ -9,9 +9,9 @@ interface SearchBarProps {
 
 export const SearchBar: React.FC<SearchBarProps> = ({ query, setQuery, resetQuery }) => {
     useEffect(() => {
-        console.log("test")
         resetQuery();
     }, [])
+    
     return (
         <div className="SearchContainer">
             <div className='SearchBar'>

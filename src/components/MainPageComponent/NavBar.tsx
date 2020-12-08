@@ -7,10 +7,8 @@ interface NavBarProps {
 
 
 export const NavBar: React.FC<NavBarProps> = ({children}) => {
-    const location = useLocation()
-    
     return (
-        <div className="header-bar" style={{background: location.pathname === '/'? '':'none'}}>
+        <div className="header-bar" >
             {children}
         </div>
     );

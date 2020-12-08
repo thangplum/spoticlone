@@ -1,5 +1,6 @@
 import React from 'react'
 import { Route, Switch } from 'react-router-dom';
+import { Search } from '../../pages/Search';
 import { Home } from '../../pages/Home';
 
 interface PageContentProps {
@@ -14,6 +15,9 @@ export const PageContent: React.FC<PageContentProps> = ({query, message, status}
             <Switch>
                 <Route exact path="/">
                     <Home />
+                </Route>
+                <Route path='/search'>
+                    <Search query={query} />
                 </Route>
             </Switch>
             <div className={`status-bar-wrapper ${status? 'active':''}`}>
