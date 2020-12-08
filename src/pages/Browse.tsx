@@ -16,7 +16,6 @@ export const Browse: React.FC<BrowseProps> = ({}) => {
 
         makeRequest()
             .then((data) => {
-                console.log(data.categories);
                 setGenre(data.categories.items)
             })
             .catch((error) => console.log(error))

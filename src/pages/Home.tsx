@@ -76,7 +76,6 @@ export const Home: React.FC<HomeProps> = ({}) => {
 
             makeRequest()
                 .then((data: any) => {
-                    console.log(data)
                     setCollections(data.categories.items);
                 })
                 .catch((error: any) => console.log(error))
@@ -121,7 +120,6 @@ export const Home: React.FC<HomeProps> = ({}) => {
                         <CollectionRow name='Uniquely Yours' id={null} playlists={[{id:'', to:'/tracks', description:'', name:'Liked Songs', images:[{url: 'https://misc.scdn.co/liked-songs/liked-songs-300.png'}]}]}/>
                         {   
                             Object.entries(fpPlaylists).map(playlist => {
-                                console.log(playlist);
                                 return (
                                     <CollectionRow name={playlist[0]} key={playlist[1].id} id={playlist[1].id} playlists={playlist[1].playlists}/>
                                 )

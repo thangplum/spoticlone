@@ -14,15 +14,17 @@ function returnDescription(type:string, info:any){
     let artists
     switch (type){
         case 'playlist':
-           return info.description || `By ${info.owner.display_name}`
+           return info.description || `By ${info.owner.display_name}`;
         case 'album':
-            artists = info.artists.map((object:any) => object.name)
-            return artists.length === 1 ? artists[0]:artists.join(', ')
+            artists = info.artists.map((object:any) => object.name);
+            return artists.length === 1 ? artists[0]:artists.join(', ');
         case 'artist':
             return 'Artist'
         case 'track':
-            artists = info.artists.map((object:any) => object.name)
-            return artists.length === 1 ? artists[0]:artists.join(', ')
+            artists = info.artists.map((object:any) => object.name);
+            return artists.length === 1 ? artists[0]:artists.join(', ');
+        case 'show':
+            return info.publisher;
         default:
             return null
     }

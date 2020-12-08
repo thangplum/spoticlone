@@ -2,7 +2,7 @@ import React from 'react'
 
 interface CollectionTitleProps {
     title: string,
-    id: string | null,
+    id?: string | null,
     description?: string
 }
 
@@ -20,8 +20,6 @@ export const CollectionTitle: React.FC<CollectionTitleProps> = ({title, id, desc
                                     fontWeight: 500,
                                     color:'white'}}>{description}</p>:null}
                 </span>
-                
-                
                 {id? <a href={`/genre/${id}`} className='seeAll'>See all</a>:null}
             </div>
             

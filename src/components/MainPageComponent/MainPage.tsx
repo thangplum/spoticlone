@@ -29,7 +29,7 @@ export const MainPage: React.FC<MainPageProps> = ({message, status}) => {
                 <Route exact path='/search'>
                     <SearchBar query={query} setQuery={setQuery} resetQuery={resetQuery} />
                 </Route>
-                <Route exact path='/collection'>
+                <Route path='/collection'>
                     <CollectionHeader />
                 </Route>
                 {login ? <UserInfo /> : <UserPrompt />}
