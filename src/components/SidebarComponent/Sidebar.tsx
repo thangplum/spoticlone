@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Logo from "../../icons/Logo";
 import NavList from './NavList';
 import { NavItem } from './NavItem';
@@ -12,8 +12,12 @@ interface SideBarProps {
 }
 
 const SideBar: React.FC<SideBarProps> = ({playlists}) => {
-    const [selected, getSelected] = useState("Home");
+    const [selected, getSelected] = useState(localStorage.getItem("SelectedSidebarItem") || "Home");
     const loggedIn = useContext(LoginContext);
+
+    useEffect(() => {
+        localStorage.setItem("SelectedSidebarItem", selected);
+    }, [selected])
     return (
         <>
             <div className="sidebar">
