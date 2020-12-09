@@ -36,7 +36,7 @@ export const Collection: React.FC<CollectionProps> = ({}) => {
             spotifyApi.getMySavedShows()
                 .then(
                     function(data) {
-                        setPodcasts(data.items)
+                        setPodcasts(data.items);
                     },
                     function(error) {
                         console.log(error);
@@ -56,7 +56,6 @@ export const Collection: React.FC<CollectionProps> = ({}) => {
             spotifyApi.getMySavedAlbums()
                 .then(
                     function(data) {
-                        console.log(data);
                         setAlbums(data.items)
                     },
                     function(error) {
@@ -65,6 +64,8 @@ export const Collection: React.FC<CollectionProps> = ({}) => {
                 )
         }
     }, [])
+
+    
     
     return (
         <div className='page-content' style={{paddingTop:'16px'}}>

@@ -3,7 +3,7 @@ import Axios from 'axios';
 import SpotifyWebApi from 'spotify-web-api-js';
 import Sidebar from './components/SidebarComponent/Sidebar';
 import { getHashParams } from './utilities/getHashParams';
-import { LoginContext, UserContext, userContext, USER_CONTEXT_DEFAULT, TokenContext, LinkContext, MessageContext } from './utilities/context'
+import { LoginContext, UserContext, userContext, USER_CONTEXT_DEFAULT, TokenContext, LinkContext, MessageContext, PlayContext } from './utilities/context'
 import { MainPage } from './components/MainPageComponent/MainPage';
 import { Footer } from './components/FooterComponent/Footer';
 import { Banner } from './components/FooterComponent/Banner';
@@ -134,12 +134,17 @@ function App() {
           : <MessageContext.Provider value={setStatusMessage}>
               <LoginContext.Provider value={loggedIn}>
                 <Sidebar playlists={playlists} />
-                <UserContext.Provider value={user}>
-                  <TokenContext.Provider value={token}>
-                    <MainPage message={message} status={status} />
-                  </TokenContext.Provider>
-                </UserContext.Provider>
+                
+                <PlayContext.Provider value={updatePlayer}>
+                  <UserContext.Provider value={user}>
+                    <TokenContext.Provider value={token}>
+                      <MainPage message={message} status={status} />
+                    </TokenContext.Provider>
+                  </UserContext.Provider>
+                </PlayContext.Provider>
+                
                 {/* TODO: Add a functional player */}
+                
                 <Footer>
                   {loggedIn ? <Player token={token} ref={playerRef} /> : <Banner />}
                 </Footer>

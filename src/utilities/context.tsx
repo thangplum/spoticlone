@@ -49,3 +49,4 @@ export const UserContext = createContext<userContext>(USER_CONTEXT_DEFAULT);
 export const TokenContext = createContext("");
 export const LinkContext = createContext("");
 export const MessageContext = createContext((message: string) => {});
+export const PlayContext = createContext(() => {})
