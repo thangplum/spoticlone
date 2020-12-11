@@ -6,6 +6,8 @@ import { Collection } from '../../pages/Collection';
 import { generateContent } from '../../utilities/tipContent';
 import ReactToolTip from 'react-tooltip';
 import { LoginContext } from '../../utilities/context';
+import { Like } from '../../pages/Like';
+
 
 interface PageContentProps {
     query: string,
@@ -27,6 +29,9 @@ export const PageContent: React.FC<PageContentProps> = ({query, message, status}
                 <Route path='/collection'>
                     {loggedIn ? <Redirect to='/collection/playlists'/> : <Redirect to='/'/>}
                     <Collection />
+                </Route>
+                <Route path='/tracks'>
+                    {loggedIn ? <Like />:<Redirect to='/'/>}
                 </Route>
             </Switch>
             <div className={`status-bar-wrapper ${status? 'active':''}`}>

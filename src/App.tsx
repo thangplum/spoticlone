@@ -58,6 +58,7 @@ function App() {
             .then(
               function(data) {
                 //cast response type to local type
+                
                 setUser(data as userContext)
               },
               function(err) {

@@ -1196,7 +1196,7 @@ body{
 }
 
 .pageTitle{
-    font-weight: 700;
+    font-weight: 500;
     margin-top: 16px;
     margin-bottom: 4px;
     font-size: 12px;
@@ -1242,10 +1242,12 @@ body{
     text-decoration: none;
     font-weight: 700;
     text-transform: capitalize;
+    margin: 0 4px;
 }
 
 .additionalInfo > a:hover{
     text-decoration: underline;
+    margin: 0 4px;
 }
 
 .additionalInfo > h2{
@@ -1255,13 +1257,11 @@ body{
     font-weight: 500;
 }
 
-.additionalInfo :not(:first-child)::before{
+.additionalInfo > p::before {
     content: "•";
     margin: 0 4px;
     display: inline-block;
 }
-
-
 
 .playListContent{
     position: relative;
