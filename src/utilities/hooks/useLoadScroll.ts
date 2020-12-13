@@ -2,7 +2,7 @@ import { CancelTokenSource } from 'axios';
 import React, { useState, useRef, useCallback } from 'react';
 import requestWithToken from '../requestWithToken';
 
-export function useLoadScroll(setTrack: React.Dispatch<React.SetStateAction<SpotifyApi.SavedTrackObject[]>>, token: string, cancelSource: CancelTokenSource): [
+export function useLoadScroll(setTrack: React.Dispatch<React.SetStateAction<any[]>>, token: string, cancelSource: CancelTokenSource): [
     React.Dispatch<React.SetStateAction<string>>,
     (node: HTMLLIElement) => void
   ]  {
@@ -11,7 +11,7 @@ export function useLoadScroll(setTrack: React.Dispatch<React.SetStateAction<Spot
     const options = {
         root: null, // window by default
         rootMargin: '0px',
-        threshold: 0.25
+        threshold: 0.1
     };
 
     const observer = useRef<any>();
@@ -25,8 +25,14 @@ export function useLoadScroll(setTrack: React.Dispatch<React.SetStateAction<Spot
                 const req = requestWithToken(next, token, cancelSource);
                 req()
                     .then((response) => {
+                      console.log(response)
                         const data = response.data;
-                        const next = data.next || data.playlists.next;
+                        let next = null;
+                        if (data.next) {
+                          next = data.next;
+                        } else if (data.playlists) {
+                          next = data.playlists.next;
+                        }
                         setTrack(tracks => [...tracks, ...data.items])
                         setNext(next)
                     })

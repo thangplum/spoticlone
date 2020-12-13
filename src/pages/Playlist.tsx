@@ -26,6 +26,7 @@ export const Playlist: React.FC<PlaylistProps> = ({}) => {
   const spotifyApi = new SpotifyWebApi();
   const [setNext, lastRef] = useInfiScroll(setTracks);
   const [total,setTotal] = useState(0);
+  const [playlists, setPlaylists] = useState([]);
 
   const [bannerInfo, setBannerInfo] = useState<SinglePlaylistResponse>({
     name: '',
@@ -57,7 +58,6 @@ export const Playlist: React.FC<PlaylistProps> = ({}) => {
       spotifyApi.getPlaylist(id)
         .then(
           function(data) {
-            console.log(data);
             const {name, description, owner, followers, primary_color, tracks, images, uri} = data;
             if (primary_color === null) {
               setBannerInfo(bannerInfo => ({...bannerInfo, name, description, user: [owner], followers: followers.total, images} as SinglePlaylistResponse))
@@ -75,7 +75,20 @@ export const Playlist: React.FC<PlaylistProps> = ({}) => {
           }
         )
     }
-    
+    if (loggedIn && id) {
+      if (token) {
+        spotifyApi.setAccessToken(token);
+        spotifyApi.getUserPlaylists()
+          .then(
+            function(data) {
+              console.log(data);
+            },
+            function(error) {
+              console.log(error);
+            }
+          )
+      }
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, loggedIn])
   return (

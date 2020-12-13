@@ -71,7 +71,7 @@ export const PageBanner: React.FC<PageBannerProps> = ({title, bannerInfo, totalT
                                 ? <img style={{borderRadius: '50%', width:'25px'}} src={person.images[0].url}></img>
                                 : <></>
                             }
-                            <a key={index} href={`/${person.type}/${person.id}`} style={{content: 'none'}}>{person.type && person.type === 'artist'? person.name : person.display_name}</a>
+                            <a key={index} href={`/${person.type}/${person.id}`} style={{content: 'none', textTransform: 'none'}}>{person.type && person.type === 'artist'? person.name : person.display_name}</a>
                             <p>{totalTracks} songs</p>
                         </>
                     ))}

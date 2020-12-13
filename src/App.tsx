@@ -19,7 +19,6 @@ function App() {
   const [token, setToken] = useState("");
   const [loggedIn, setLogin] = useState(false);
   const [user, setUser] = useState<userContext>(USER_CONTEXT_DEFAULT)
-  const [playlists, setPlaylists] = useState<SpotifyApi.PlaylistObjectSimplified[]>([]);
 
   const [status, setStatus] = useState(false);
   const [message, setMessage] = useState('');
@@ -42,23 +41,12 @@ function App() {
         setLogin(true);
         setToken(access_token);
         window.location.hash = ''
-        //fetch playlists
-        spotifyApi.getUserPlaylists().
-          then(
-            function(data) {
-              setPlaylists(data.items);
-            },
-            function(err) {
-              console.log(err);
-            }
-          )
-        
+
         //fetch user account information
         spotifyApi.getMe()
             .then(
               function(data) {
                 //cast response type to local type
-                
                 setUser(data as userContext)
               },
               function(err) {
@@ -73,15 +61,6 @@ function App() {
             setToken(access_token);
             setLogin(true);
             spotifyApi.setAccessToken(access_token);
-            spotifyApi.getUserPlaylists().
-              then(
-                function(data) {
-                  setPlaylists(data.items);
-                },
-                function(err) {
-                  console.log(err);
-                }
-              )
           
             //fetch user account information
             spotifyApi.getMe()
@@ -134,17 +113,15 @@ function App() {
           ? <Loading type='app' />
           : <MessageContext.Provider value={setStatusMessage}>
               <LoginContext.Provider value={loggedIn}>
-                <Sidebar playlists={playlists} />
-                
-                <PlayContext.Provider value={updatePlayer}>
-                  <UserContext.Provider value={user}>
-                    <TokenContext.Provider value={token}>
+                <TokenContext.Provider value={token}>
+                  <Sidebar />
+
+                  <PlayContext.Provider value={updatePlayer}>
+                    <UserContext.Provider value={user}>
                       <MainPage message={message} status={status} />
-                    </TokenContext.Provider>
-                  </UserContext.Provider>
-                </PlayContext.Provider>
-                
-                {/* TODO: Add a functional player */}
+                    </UserContext.Provider>
+                  </PlayContext.Provider>
+                </TokenContext.Provider>
                 
                 <Footer>
                   {loggedIn ? <Player token={token} ref={playerRef} /> : <Banner />}

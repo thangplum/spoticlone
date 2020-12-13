@@ -2,13 +2,14 @@ import React from 'react'
 import { NavLink } from 'react-router-dom';
 
 interface ListItemProps {
-    name: string,
-    id: string
+    name: string;
+    id: string;
+    ref?: (node: HTMLLIElement) => void;
 }
 
-export const ListItem: React.FC<ListItemProps> = ({name, id}) => {
+export const ListItem = React.forwardRef<HTMLLIElement, ListItemProps>(({name, id}, ref) => {
     return (
-        <li className='side-list'>
+        <li ref={ref} className='side-list'>
             <NavLink to={`/playlist/${id}`} className='list-link' activeStyle={{color: '#fff'}}>
                 <div className="list-wrapper">
                     {name}
@@ -16,4 +17,4 @@ export const ListItem: React.FC<ListItemProps> = ({name, id}) => {
             </NavLink>
         </li>
     );
-}
+})
