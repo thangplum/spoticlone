@@ -22,5 +22,5 @@ export default function createRequest(endpoint: string) {
         return result.data
     }
     
-    return {source, makeRequest}
+  return {source, makeRequest}
 }

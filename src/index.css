@@ -1242,12 +1242,11 @@ body{
     text-decoration: none;
     font-weight: 700;
     text-transform: capitalize;
-    margin: 0 4px;
+    
 }
 
 .additionalInfo > a:hover{
     text-decoration: underline;
-    margin: 0 4px;
 }
 
 .additionalInfo > h2{
@@ -1255,12 +1254,15 @@ body{
     white-space: nowrap;
     font-size: 14px;
     font-weight: 500;
+    margin: 0 4px;
+    display: inline-block;
 }
 
 .additionalInfo > p::before {
     content: "•";
     margin: 0 4px;
     display: inline-block;
+    color: hsla(0,0%,100%,.7);
 }
 
 .playListContent{

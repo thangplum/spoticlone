@@ -34,7 +34,7 @@ export const MainPage: React.FC<MainPageProps> = ({message, status}) => {
                 </Route>
                 {login ? <UserInfo /> : <UserPrompt />}
             </NavBar>
-            <PageContent query={query} message={message} status={status}  />
+            <PageContent query={query} message={message} status={status} />
         </div>
         
     );

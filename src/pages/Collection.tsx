@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Route } from 'react-router-dom';
 import SpotifyWebApi from 'spotify-web-api-js';
-import { CollectionRow } from '../components/MainPageComponent/CollectionRow';
 import { CollectionTitle } from '../components/MainPageComponent/CollectionTitle';
 import { PlayCard } from '../components/MainPageComponent/PlayCard';
 import { TokenContext } from '../utilities/context';

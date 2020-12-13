@@ -22,6 +22,7 @@ export const TrackListItem = React.forwardRef<HTMLLIElement, TrackListItemProps>
     const { album, artists, name, explicit, duration_ms, uri } = track;
 
     const updatePlayer = useContext(PlayContext);
+
     let thumbNail;
     if (styleName === "simplify" && album.images.length > 0) {
         thumbNail = album.images[album.images.length - 1].url;
@@ -43,8 +44,8 @@ export const TrackListItem = React.forwardRef<HTMLLIElement, TrackListItemProps>
                             : "hoverIcon trackTopAlign no-outline"
                     }
                     onClick={() => {
+                        setTimeout(() => updatePlayer(), 500);
                         playContextTrack(uri);
-                        updatePlayer();
                     }}
                 >
                     <Icon name="Play" height="20" width="20" />

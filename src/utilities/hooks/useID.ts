@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {useLocation} from 'react-router-dom'
 
-function useId(page?: any) {
+function useId(page?: string) {
     const [id, setId] = useState("")
     const location = useLocation()
 
@@ -10,10 +10,10 @@ function useId(page?: any) {
 
         if (path.length === 3){
             setId(path[path.length-1])
-        }else if (path.length > 3){
+        } else if (path.length > 3){
             const idIndex = path.findIndex(path => path===page) + 1
             setId(path[idIndex])
-        }else{
+        } else {
             setId('')
         }
     }, [location, page])

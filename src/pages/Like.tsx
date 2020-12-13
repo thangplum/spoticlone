@@ -6,6 +6,7 @@ import { TrackList } from '../components/MainPageComponent/TrackList';
 import { TokenContext, UserContext } from '../utilities/context';
 import { useLoadScroll } from '../utilities/hooks/useLoadScroll';
 import axios from "axios";
+import { SinglePlaylistResponse } from '../utilities/types';
 interface LikeProps {
 
 }
@@ -21,13 +22,15 @@ export const Like: React.FC<LikeProps> = ({}) => {
 
 
     const bannerInfo = {
-        name: 'Liked Songs',
-        description: '',
-        user: [user],
-        followers: {total: 0},
-        primary_color: 'rgb(70, 62, 118)',
-        images: [{url: 'https://t.scdn.co/images/3099b3803ad9496896c43f22fe9be8c4.png'}],
-    }
+      name: 'Liked Songs',
+      description: '',
+      user: [user],
+      followers: 0,
+      primary_color: 'rgb(70, 62, 118)',
+      images: [{url: 'https://t.scdn.co/images/3099b3803ad9496896c43f22fe9be8c4.png'}],
+      release_date: '',
+      total: 0
+    } as SinglePlaylistResponse;
 
     useEffect(() => {
         if (token) {
@@ -65,6 +68,20 @@ export const Like: React.FC<LikeProps> = ({}) => {
             })
     }
 
+    const playTrack = (trackURI: string) => {
+        const body = {
+            uris: [trackURI]
+        }
+        spotifyApi.setAccessToken(token);
+        spotifyApi.play(body)
+            .then((response) => {
+                console.log(response);
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+    }
+
     return (
         <div className='listPage' style={{display: `${likedTracks.length === 0 ? 'none':'block'}`}}>
             <PageBanner title={'playlist'} bannerInfo={bannerInfo} totalTracks={numTracks} /> 
@@ -72,7 +89,7 @@ export const Like: React.FC<LikeProps> = ({}) => {
                 <div className="playListOverlay" style={{backgroundColor: `${bannerInfo.primary_color}`}} />
                 <PlaylistFunc type='playOnly' playContext={playTracks} />
                 <div className="page-content">
-                    <TrackList ref={lastRef} tracks={likedTracks} playContextTrack={playTracks} styleName="simplify" />
+                    <TrackList ref={lastRef} tracks={likedTracks} playContextTrack={playTrack} styleName="simplify" />
                 </div>
             </div>
         </div>

@@ -7,6 +7,7 @@ import { generateContent } from '../../utilities/tipContent';
 import ReactToolTip from 'react-tooltip';
 import { LoginContext } from '../../utilities/context';
 import { Like } from '../../pages/Like';
+import { Playlist } from '../../pages/Playlist';
 
 
 interface PageContentProps {
@@ -21,17 +22,20 @@ export const PageContent: React.FC<PageContentProps> = ({query, message, status}
         <>
             <Switch>
                 <Route exact path="/">
-                    <Home />
+                  <Home />
                 </Route>
                 <Route path='/search'>
-                    <Search query={query} />
+                  <Search query={query} />
                 </Route>
                 <Route path='/collection'>
-                    {loggedIn ? <Redirect to='/collection/playlists'/> : <Redirect to='/'/>}
-                    <Collection />
+                  {loggedIn ? <Redirect to='/collection/playlists'/> : <Redirect to='/'/>}
+                  <Collection />
                 </Route>
                 <Route path='/tracks'>
-                    {loggedIn ? <Like />:<Redirect to='/'/>}
+                  {loggedIn ? <Like />:<Redirect to='/'/>}
+                </Route>
+                <Route path='/playlist'>
+                  <Playlist />
                 </Route>
             </Switch>
             <div className={`status-bar-wrapper ${status? 'active':''}`}>

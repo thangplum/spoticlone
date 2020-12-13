@@ -215,3 +215,14 @@ export interface WebPlaybackTrack {
   type: string;
   uri: string;
 }
+
+export interface SinglePlaylistResponse {
+  name: string;
+  description: string;
+  primary_color: string | null;
+  user: SpotifyApi.UserObjectPublic[] | null;
+  followers: number;
+  images: SpotifyApi.ImageObject[];
+  release_date: string;
+  total: number;
+}

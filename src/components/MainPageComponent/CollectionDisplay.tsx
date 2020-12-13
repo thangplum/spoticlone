@@ -18,7 +18,7 @@ export const CollectionDisplay = React.forwardRef<HTMLDivElement, CollectionDisp
                         unique.push(playlist.name);
                         return <PlayCard key={playlist.id} info={playlist} type={playlist.type}/> 
                     }
-                }else{
+                } else {
                     return null
                 }
             })}

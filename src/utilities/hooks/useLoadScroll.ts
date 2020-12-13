@@ -21,12 +21,10 @@ export function useLoadScroll(setTrack: React.Dispatch<React.SetStateAction<Spot
             observer.current.disconnect();
         }
         observer.current = new IntersectionObserver(entries => {
-            console.log(entries);
             if (entries[0].isIntersecting && next) {
                 const req = requestWithToken(next, token, cancelSource);
                 req()
                     .then((response) => {
-                        console.log(response);
                         const data = response.data;
                         const next = data.next || data.playlists.next;
                         setTrack(tracks => [...tracks, ...data.items])
@@ -37,6 +35,7 @@ export function useLoadScroll(setTrack: React.Dispatch<React.SetStateAction<Spot
         }, options)
         
         if (node) observer.current.observe(node)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [next])
 
     return [setNext, lastRef];

@@ -1,19 +1,11 @@
 import React, { CSSProperties } from 'react'
+import SpotifyWebApi from 'spotify-web-api-js';
 import Icon from '../../icons';
-import { userContext } from '../../utilities/context';
+import { SinglePlaylistResponse } from '../../utilities/types';
 
 interface PageBannerProps {
     title: string,
-    bannerInfo: { 
-        name: string; 
-        description: string; 
-        user: userContext[]; 
-        followers: {total: number}; 
-        primary_color: string; 
-        images: { url: string; }[]; 
-        release_date?: string, 
-        total?: number
-    },
+    bannerInfo: SinglePlaylistResponse,
     totalTracks: number
 }
 
@@ -53,7 +45,7 @@ export const PageBanner: React.FC<PageBannerProps> = ({title, bannerInfo, totalT
     }
 
     if (followers){
-        likes = followers.total.toLocaleString('en-US');
+        likes = followers.toLocaleString('en-US');
     }
     return (
         <div className="banner" style={{backgroundColor:`${primary_color}`, height: title === 'artist'?'40vh':'30vh'}}>
@@ -73,21 +65,21 @@ export const PageBanner: React.FC<PageBannerProps> = ({title, bannerInfo, totalT
                 </span>
                 <p className="bannerDescription" style={{display: description===''? 'none':'flex'}}>{description}</p>
                 <div className="additionalInfo">
-                    {user && user[0] && user.map((person:any , index:number) => (
+                    {user && user[0] && user.map((person: any, index: number) => (
                         <>
-                            {person.images[0] 
+                            {person.images && person.images[0] 
                                 ? <img style={{borderRadius: '50%', width:'25px'}} src={person.images[0].url}></img>
                                 : <></>
                             }
-                            <a key={index} href={`/${person.type}/${person.id}`} style={{content: 'none'}}>{person.type === 'artist'? person.name:person.display_name}</a>
+                            <a key={index} href={`/${person.type}/${person.id}`} style={{content: 'none'}}>{person.type && person.type === 'artist'? person.name : person.display_name}</a>
                             <p>{totalTracks} songs</p>
                         </>
                     ))}
                     {total !== 0 && total&& 
                         <h2>{total} Playlists</h2>
                     }
-                    {followers.total !== 0 &&
-                        <h2 style={title === 'artist' ? followerStyle : undefined}>{likes} {followerTitle(title)}</h2>
+                    {followers !== 0 &&
+                        <p style={title === 'artist' ? followerStyle : undefined}>{likes} {followerTitle(title)}</p>
                     }
                     {release_date && 
                         <h2>{release_date}</h2>

@@ -4,6 +4,7 @@ import SpotifyWebApi from 'spotify-web-api-js';
 import { LoginContext, TokenContext } from '../utilities/context';
 import getLocale from '../utilities/locale';
 import createRequest from '../utilities/createRequest';
+import { Loading } from '../components/MainPageComponent/Loading';
 
 interface HomeProps {
 
@@ -16,6 +17,7 @@ export const Home: React.FC<HomeProps> = ({}) => {
     const [collections, setCollections] = useState<any[]>([]);
     const [tempPlaylists, setTempPlaylists] = useState<any>({});
     const [fpPlaylists, setFpPlaylists] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
     const loggedIn = useContext(LoginContext);
     const token = useContext(TokenContext);
     const spotifyApi = new SpotifyWebApi();
@@ -83,6 +85,7 @@ export const Home: React.FC<HomeProps> = ({}) => {
             
             return () => source.cancel()
         }
+        setLoading(false);
     }, [token])
 
     useEffect(() => { 
@@ -101,34 +104,43 @@ export const Home: React.FC<HomeProps> = ({}) => {
                 .catch((error) => console.log(error))
             return null
         })
+        // setLoading(false);
     }, [collections])
     
     useEffect(() => {
         setFpPlaylists({...fpPlaylists, ...tempPlaylists});
+        // setLoading(false);
     }, [tempPlaylists])
 
     return (
-        <div className="page-content">
-            <div className='pageContent'>
-                {loggedIn 
-                ?   <>
-                        <CollectionRow name='Recently played' id={null} playlists={recentlyPlaylist} />
-                        <CollectionRow name='Jump back in' id={null} playlists={topTracksAndArtists} description={"Your top listens from the past few months."} />
-                        <CollectionRow name='New releases for you' id={null} playlists={newReleases} />
-                    </>
-                :   <>
-                        <CollectionRow name='Uniquely Yours' id={null} playlists={[{id:'', to:'/tracks', description:'', name:'Liked Songs', images:[{url: 'https://misc.scdn.co/liked-songs/liked-songs-300.png'}]}]}/>
-                        {   
-                            Object.entries(fpPlaylists).map(playlist => {
-                                return (
-                                    <CollectionRow name={playlist[0]} key={playlist[1].id} id={playlist[1].id} playlists={playlist[1].playlists}/>
-                                )
-                            })
+        <>
+            {loading || !recentlyPlaylist || !newReleases || !topTracksAndArtists
+            ?   <Loading type='home'/>
+            :   <div className="page-content">
+                    <div className='pageContent'>
+                        {loggedIn 
+                            ?   <>
+                                    <CollectionRow name='Recently played' id={null} playlists={recentlyPlaylist} />
+                                    <CollectionRow name='Jump back in' id={null} playlists={topTracksAndArtists} description={"Your top listens from the past few months."} />
+                                    <CollectionRow name='New releases for you' id={null} playlists={newReleases} />
+                                </>
+                            :   <>
+                                    <CollectionRow name='Uniquely Yours' id={null} playlists={[{id:'', to:'/tracks', description:'', name:'Liked Songs', images:[{url: 'https://misc.scdn.co/liked-songs/liked-songs-300.png'}]}]}/>
+                                    {   
+                                        Object.entries(fpPlaylists).map(playlist => {
+                                            return (
+                                                <CollectionRow name={playlist[0]} key={playlist[1].id} id={playlist[1].id} playlists={playlist[1].playlists}/>
+                                            )
+                                        })
+                                    }
+                                </>
                         }
-                    </>
-                }
-                
-            </div>
-        </div>
+                        
+                    </div>
+                </div>
+        }
+        </>
+        
+        
     );
 }
