@@ -11,9 +11,9 @@ import { Playlist } from '../../pages/Playlist';
 
 
 interface PageContentProps {
-    query: string,
-    message: string,
-    status: boolean
+  query: string;
+  message: string;
+  status: boolean;
 }
 
 export const PageContent: React.FC<PageContentProps> = ({query, message, status}) => {

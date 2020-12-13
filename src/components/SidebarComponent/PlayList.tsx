@@ -24,7 +24,6 @@ export const PlayList: React.FC<PlayListProps> = () => {
       spotifyApi.getUserPlaylists()
         .then(
           function(data) {
-            console.log(data);
             setPlaylists(data.items);
             setNext(data.next);
           },

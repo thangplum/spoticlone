@@ -10,8 +10,8 @@ import { UserPrompt } from './UserPrompt';
 import { PageContent } from './PageContent';
 
 interface MainPageProps {
-    message: string,
-    status: boolean
+  message: string;
+  status: boolean;
 }
 
 export const MainPage: React.FC<MainPageProps> = ({message, status}) => {

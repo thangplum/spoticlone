@@ -19,9 +19,9 @@ function App() {
   const [token, setToken] = useState("");
   const [loggedIn, setLogin] = useState(false);
   const [user, setUser] = useState<userContext>(USER_CONTEXT_DEFAULT)
-
   const [status, setStatus] = useState(false);
   const [message, setMessage] = useState('');
+  
 
   const timerRef = useRef(0);
 
@@ -53,6 +53,7 @@ function App() {
                 console.log(err)
               }
             )
+
         setLoading(false);
       } else {
         Axios(`${process.env.REACT_APP_BACK_URI}/refresh_token`, {withCredentials: true})
@@ -73,6 +74,7 @@ function App() {
                   console.log(err);
                 }
               )
+              
             setLoading(false);
           })
           .catch((error) => {
@@ -82,7 +84,6 @@ function App() {
           })
       }
     }
-
     return (() => {
       clearTimeout(timerRef.current);
     });
@@ -105,8 +106,8 @@ function App() {
     }, 3000)
   }
   
-  // TODO: 
-  // 2. Continue to do player
+  
+
   return (
       <div className="App">
         {loading 

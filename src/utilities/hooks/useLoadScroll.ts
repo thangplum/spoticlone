@@ -25,7 +25,6 @@ export function useLoadScroll(setTrack: React.Dispatch<React.SetStateAction<any[
                 const req = requestWithToken(next, token, cancelSource);
                 req()
                     .then((response) => {
-                      console.log(response)
                         const data = response.data;
                         let next = null;
                         if (data.next) {
