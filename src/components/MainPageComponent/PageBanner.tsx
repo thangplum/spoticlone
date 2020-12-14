@@ -5,7 +5,7 @@ import { SinglePlaylistResponse } from '../../utilities/types';
 
 interface PageBannerProps {
     title: string,
-    bannerInfo: SinglePlaylistResponse,
+    bannerInfo: any,
     totalTracks: number
 }
 
@@ -76,14 +76,15 @@ export const PageBanner: React.FC<PageBannerProps> = ({title, bannerInfo, totalT
                         </>
                     ))}
                     {total !== 0 && total&& 
-                        <h2>{total} Playlists</h2>
-                    }
-                    {followers !== 0 &&
-                        <p style={title === 'artist' ? followerStyle : undefined}>{likes} {followerTitle(title)}</p>
+                      <h2>{total} Playlists</h2>
                     }
                     {release_date && 
-                        <h2>{release_date}</h2>
+                      <p>{release_date}</p>
                     }
+                    {followers !== 0 &&
+                      <p style={title === 'artist' ? followerStyle : undefined}>{likes} {followerTitle(title)}</p>
+                    }
+                    
                 </div>
             </div>
             <div className="bannerOverlay"></div>

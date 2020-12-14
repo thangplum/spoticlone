@@ -2,7 +2,7 @@
 import React, { useState, useRef, useCallback } from 'react';
 import createRequest from '../createRequest';
 
-function useInfiScroll(setList: React.Dispatch<React.SetStateAction<SpotifyApi.SavedTrackObject[]>>): [
+function useInfiScroll(setList: React.Dispatch<React.SetStateAction<any[]>>): [
   React.Dispatch<React.SetStateAction<string>>,
   (node: HTMLLIElement) => void
 ] {

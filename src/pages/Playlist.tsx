@@ -65,7 +65,8 @@ export const Playlist: React.FC<PlaylistProps> = () => {
             } else {
               setBannerInfo(bannerInfo => ({...bannerInfo, name, description, primary_color, user: [owner], followers: followers.total, images} as SinglePlaylistResponse))
             }
-            setTracks(tracks.items.map((track) => track));
+            console.log(data);
+            setTracks(tracks.items.map((track) => track.track));
             setNext(tracks.next || '');
             setURI(uri);
             setTotal(data.tracks.total);

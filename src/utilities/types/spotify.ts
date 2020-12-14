@@ -226,3 +226,15 @@ export interface SinglePlaylistResponse {
   release_date: string;
   total: number;
 }
+
+export interface SingleAlbumResponse {
+  album_type: string;
+  name: string;
+  description: string;
+  primary_color: string | null;
+  user: SpotifyApi.ArtistObjectSimplified[] | null;
+  followers: number;
+  images: SpotifyApi.ImageObject[];
+  release_date: string;
+  total: number;
+}

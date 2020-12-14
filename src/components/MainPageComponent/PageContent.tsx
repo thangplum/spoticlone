@@ -8,6 +8,7 @@ import ReactToolTip from 'react-tooltip';
 import { LoginContext } from '../../utilities/context';
 import { Like } from '../../pages/Like';
 import { Playlist } from '../../pages/Playlist';
+import { Album } from '../../pages/Album';
 
 
 interface PageContentProps {
@@ -36,6 +37,9 @@ export const PageContent: React.FC<PageContentProps> = ({query, message, status}
                 </Route>
                 <Route path='/playlist'>
                   <Playlist />
+                </Route>
+                <Route path='/album' >
+                  <Album />
                 </Route>
             </Switch>
             <div className={`status-bar-wrapper ${status? 'active':''}`}>

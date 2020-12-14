@@ -2,9 +2,9 @@ import React, { CSSProperties } from 'react'
 import { TrackListItem } from './TrackListItem';
 
 interface TrackListProps {
-    tracks: SpotifyApi.SavedTrackObject[];
+    tracks: any[];
     styleName?: string;
-    highlight?: string;
+    highlight?: string | null;
     playContextTrack: (uri: string) => void;
     ref: (node: HTMLLIElement) => void;
 }
@@ -14,11 +14,11 @@ export const TrackList = React.forwardRef<HTMLLIElement, TrackListProps>(({track
     return (
         <div className="trackListContainer">
             <ol className="trackList">
-                {tracks.map((track: SpotifyApi.SavedTrackObject, index) => {
+                {tracks.map((track: any, index) => {
                     if (index+1 < tracks.length){
-                        return <TrackListItem track={track.track} key={track.track.id} styleName={styleName} highlight={track.track.id === highlight} playContextTrack={playContextTrack}/>
+                        return <TrackListItem track={track} key={track.id} styleName={styleName} highlight={track.id === highlight} playContextTrack={playContextTrack}/>
                     }else{
-                        return <TrackListItem ref={ref} track={track.track} key={track.track.id} styleName={styleName} highlight={track.track.id === highlight} playContextTrack={playContextTrack}/>
+                        return <TrackListItem ref={ref} track={track} key={track.id} styleName={styleName} highlight={track.id === highlight} playContextTrack={playContextTrack}/>
                     }
                 })}
             </ol>
