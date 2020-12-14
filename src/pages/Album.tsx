@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom';
 import SpotifyWebApi from 'spotify-web-api-js';
 import { Loading } from '../components/MainPageComponent/Loading';
 import { PageBanner } from '../components/MainPageComponent/PageBanner';
@@ -8,7 +7,7 @@ import { TrackList } from '../components/MainPageComponent/TrackList';
 import { TokenContext, MessageContext, PlayContext } from '../utilities/context'
 import useId from '../utilities/hooks/useID'
 import useInfiScroll from '../utilities/hooks/useInfiScroll';
-import { SingleAlbumResponse, SinglePlaylistResponse } from '../utilities/types';
+import { SingleAlbumResponse } from '../utilities/types';
 
 interface AlbumProps {
 
@@ -19,7 +18,7 @@ interface SingleAlbum extends SpotifyApi.SingleAlbumResponse {
 }
 
 
-export const Album: React.FC<AlbumProps> = ({}) => {
+export const Album: React.FC<AlbumProps> = () => {
   const id = useId();
   const token = useContext(TokenContext);
   const setMessage = useContext(MessageContext);
@@ -27,7 +26,7 @@ export const Album: React.FC<AlbumProps> = ({}) => {
   const [loading, setLoading] = useState(true);
   const [tracks, setTracks] = useState<SpotifyApi.TrackObjectSimplified[]>([]);
   const [uri, setUri] = useState('');
-  const [like, setLike] = useState(false);
+  const [, setLike] = useState(false);
   const [totalTracks, setTotalTracks] = useState(0);
   const spotifyApi = new SpotifyWebApi();
   const [setNext, lastRef] = useInfiScroll(setTracks);
@@ -82,6 +81,7 @@ export const Album: React.FC<AlbumProps> = ({}) => {
           }
         )
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id])
 
   const playAlbum = () => {

@@ -1,6 +1,7 @@
-import axios from 'axios'
+import axios, { CancelTokenSource } from 'axios'
 
-export default function createRequest(endpoint: string) {
+export default function createRequest(endpoint: string):
+[CancelTokenSource, () => Promise<any>] {
     let source = axios.CancelToken.source()
     
     const makeRequest = async () => {
@@ -22,5 +23,5 @@ export default function createRequest(endpoint: string) {
         return result.data
     }
     
-  return {source, makeRequest}
+  return [source, makeRequest]
 }

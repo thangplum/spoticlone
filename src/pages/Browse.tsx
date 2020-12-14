@@ -12,7 +12,7 @@ export const Browse: React.FC<BrowseProps> = ({}) => {
     const [genre, setGenre] = useState<SpotifyApi.CategoryObject[]>([]);
 
     useEffect(() => {
-        const {source, makeRequest} = createRequest('https://api.spotify.com/v1/browse/categories?limit=50')
+        const [source, makeRequest] = createRequest('https://api.spotify.com/v1/browse/categories?limit=50')
 
         makeRequest()
             .then((data) => {

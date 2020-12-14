@@ -9,6 +9,8 @@ import { LoginContext } from '../../utilities/context';
 import { Like } from '../../pages/Like';
 import { Playlist } from '../../pages/Playlist';
 import { Album } from '../../pages/Album';
+import { Artist } from '../../pages/Artist';
+import { Podcast } from '../../pages/Podcast';
 
 
 interface PageContentProps {
@@ -40,6 +42,12 @@ export const PageContent: React.FC<PageContentProps> = ({query, message, status}
                 </Route>
                 <Route path='/album' >
                   <Album />
+                </Route>
+                <Route path='/artist'>
+                  <Artist />
+                </Route>
+                <Route path='/show'>
+                  <Podcast />
                 </Route>
             </Switch>
             <div className={`status-bar-wrapper ${status? 'active':''}`}>

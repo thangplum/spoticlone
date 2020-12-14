@@ -83,7 +83,7 @@ function App() {
             return ;
           })
       }
-    }
+    } 
     return (() => {
       clearTimeout(timerRef.current);
     });
@@ -106,8 +106,6 @@ function App() {
     }, 3000)
   }
   
-  
-
   return (
       <div className="App">
         {loading 

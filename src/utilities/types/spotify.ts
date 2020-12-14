@@ -238,3 +238,7 @@ export interface SingleAlbumResponse {
   release_date: string;
   total: number;
 }
+
+export interface ShowObject extends SpotifyApi.SingleShowResponse {
+  total_episodes: number;
+}

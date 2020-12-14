@@ -26,8 +26,8 @@ export const Home: React.FC<HomeProps> = ({}) => {
         if (token) {
             spotifyApi.setAccessToken(token);
 
-            spotifyApi.getNewReleases().
-                then (
+            spotifyApi.getNewReleases()
+                .then (
                     function(data) {
                         setNewReleases(data.albums.items as any)
                     },
@@ -36,8 +36,8 @@ export const Home: React.FC<HomeProps> = ({}) => {
                     }
                 )
 
-            spotifyApi.getMyRecentlyPlayedTracks().
-                then (
+            spotifyApi.getMyRecentlyPlayedTracks()
+                .then (
                     function(data) {
                         const recentlyPlaylistList: SpotifyApi.TrackObjectSimplified[] = [];
                         data.items.map((track, index) => {
@@ -49,8 +49,8 @@ export const Home: React.FC<HomeProps> = ({}) => {
                         console.log(err);
                     }
                 )
-            spotifyApi.getMyTopTracks().
-                then (
+            spotifyApi.getMyTopTracks()
+                .then (
                     function(data) {
                         data.items.slice(0, 5).map((track, index) => {
                             setTop(prevTop => ([...prevTop, track]));
@@ -61,8 +61,8 @@ export const Home: React.FC<HomeProps> = ({}) => {
                     }
                 )
 
-            spotifyApi.getMyTopArtists().
-                then (
+            spotifyApi.getMyTopArtists()
+                .then (
                     function(data) {
                         data.items.slice(0, 5).map((artist, index) => {
                             setTop(prevTop => ([...prevTop, artist]));
@@ -74,7 +74,7 @@ export const Home: React.FC<HomeProps> = ({}) => {
                 )
         } else {
             const [language, locale] = getLocale()
-            const {source, makeRequest} = createRequest(`https://api.spotify.com/v1/browse/categories?limit=6&country=${locale}&locale=${language}_${locale}`)
+            const [source, makeRequest] = createRequest(`https://api.spotify.com/v1/browse/categories?limit=6&country=${locale}&locale=${language}_${locale}`)
 
             makeRequest()
                 .then((data: any) => {
@@ -95,8 +95,8 @@ export const Home: React.FC<HomeProps> = ({}) => {
     useEffect(() => {
         collections.map((collection) => {
             const {name, id} = collection
-            var rq = createRequest(`https://api.spotify.com/v1/browse/categories/${id}/playlists?limit=9`)
-            rq.makeRequest()
+            var [ ,makeRequest] = createRequest(`https://api.spotify.com/v1/browse/categories/${id}/playlists?limit=9`)
+            makeRequest()
                 .then((data) => {
                     const playlists = data.playlists.items
                     setTempPlaylists(() => ({[name]: {id, playlists}}))
@@ -113,34 +113,26 @@ export const Home: React.FC<HomeProps> = ({}) => {
     }, [tempPlaylists])
 
     return (
-        <>
-            {loading || !recentlyPlaylist || !newReleases || !topTracksAndArtists
-            ?   <Loading type='home'/>
-            :   <div className="page-content">
-                    <div className='pageContent'>
-                        {loggedIn 
-                            ?   <>
-                                    <CollectionRow name='Recently played' id={null} playlists={recentlyPlaylist} />
-                                    <CollectionRow name='Jump back in' id={null} playlists={topTracksAndArtists} description={"Your top listens from the past few months."} />
-                                    <CollectionRow name='New releases for you' id={null} playlists={newReleases} />
-                                </>
-                            :   <>
-                                    <CollectionRow name='Uniquely Yours' id={null} playlists={[{id:'', to:'/tracks', description:'', name:'Liked Songs', images:[{url: 'https://misc.scdn.co/liked-songs/liked-songs-300.png'}]}]}/>
-                                    {   
-                                        Object.entries(fpPlaylists).map(playlist => {
-                                            return (
-                                                <CollectionRow name={playlist[0]} key={playlist[1].id} id={playlist[1].id} playlists={playlist[1].playlists}/>
-                                            )
-                                        })
-                                    }
-                                </>
+      <div className="page-content">
+        <div className='pageContent'>
+            {loggedIn 
+                ?   <>
+                        <CollectionRow name='Recently played' id={null} playlists={recentlyPlaylist} />
+                        <CollectionRow name='Jump back in' id={null} playlists={topTracksAndArtists} description={"Your top listens from the past few months."} />
+                        <CollectionRow name='New releases for you' id={null} playlists={newReleases} />
+                    </>
+                :   <>
+                        <CollectionRow name='Uniquely Yours' id={null} playlists={[{id:'', to:'/tracks', description:'', name:'Liked Songs', images:[{url: 'https://misc.scdn.co/liked-songs/liked-songs-300.png'}]}]}/>
+                        {   
+                            Object.entries(fpPlaylists).map(playlist => {
+                                return (
+                                    <CollectionRow name={playlist[0]} key={playlist[1].id} id={playlist[1].id} playlists={playlist[1].playlists}/>
+                                )
+                            })
                         }
-                        
-                    </div>
-                </div>
-        }
-        </>
-        
-        
+                    </>
+            }
+        </div>
+      </div>  
     );
 }

@@ -69,7 +69,7 @@ export const PlayCard: React.FC<PlayCardProps> = ({info, type}) => {
 
             spotifyApi.play(body)
                 .then ((response) => {
-                    setTimeout(() => updatePlayer(), 1000)
+                    setTimeout(() => updatePlayer(), 500)
                 })
         } else {
             history.push(`/tracks`)
@@ -87,7 +87,7 @@ export const PlayCard: React.FC<PlayCardProps> = ({info, type}) => {
             {loggedIn
                 ?   <button className="smallButton no-outline" title="Play" onClick={() => {
                     handlePlay();
-                    updatePlayer();
+                    setTimeout(() => updatePlayer(), 500)
                 }}>
                         <Icon name="Play" height='17' width='17'/>
                     </button>

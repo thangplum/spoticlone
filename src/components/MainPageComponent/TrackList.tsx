@@ -1,11 +1,11 @@
-import React, { CSSProperties } from 'react'
+import React from 'react'
 import { TrackListItem } from './TrackListItem';
 
 interface TrackListProps {
     tracks: any[];
     styleName?: string;
     highlight?: string | null;
-    playContextTrack: (uri: string) => void;
+    playContextTrack: (uri: string) => void | undefined;
     ref: (node: HTMLLIElement) => void;
 }
 

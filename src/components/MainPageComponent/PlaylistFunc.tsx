@@ -32,8 +32,8 @@ const PlayButtonLarge: React.FC<PlayButtonProps>= ({loggedIn, playContext}) => {
     if (loggedIn){
         return (
             <button className="playButton no-outline" title="Play" onClick={() => {
-                playContext()
-                setTimeout(() => updatePlayer(), 500)
+              playContext()
+              setTimeout(() => updatePlayer(), 500)
             }}>
                 <Icon name="Play" height='28' width='28'/>
             </button>

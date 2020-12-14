@@ -20,7 +20,7 @@ export const SearchRow: React.FC<SearchRowProps> = ({title, type, query}) => {
     }, [query])
 
     useEffect(() => {
-        const {source, makeRequest} = createRequest(`https://api.spotify.com/v1/search?q=${formattedQuery}&type=${type}&limit=9`)
+        const [source, makeRequest] = createRequest(`https://api.spotify.com/v1/search?q=${formattedQuery}&type=${type}&limit=9`)
         if (formattedQuery.length > 0){
             makeRequest()
                 .then((data) => {

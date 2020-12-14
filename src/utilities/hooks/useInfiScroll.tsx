@@ -14,7 +14,7 @@ function useInfiScroll(setList: React.Dispatch<React.SetStateAction<any[]>>): [
         if (observer.current) observer.current.disconnect()
         observer.current = new IntersectionObserver(entries => {
             if(entries[0].isIntersecting && next){
-                const {makeRequest} = createRequest(next)
+                const [, makeRequest] = createRequest(next)
                 makeRequest()
                     .then(data => {
                         let resultList: SpotifyApi.SavedTrackObject[], 

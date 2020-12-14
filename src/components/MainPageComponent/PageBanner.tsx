@@ -37,9 +37,9 @@ const spanStyle = {
 } as CSSProperties;
 
 export const PageBanner: React.FC<PageBannerProps> = ({title, bannerInfo, totalTracks}) => {
-    const {name, description, user, followers, primary_color, images, release_date, total} = bannerInfo;
+    const {name, description, user, followers, primary_color, images, release_date, total, publisher} = bannerInfo;
+    console.log(publisher)
     let imgUrl, likes;
-
     if (images && images.length > 0){
         imgUrl = images[0].url
     }
@@ -63,7 +63,11 @@ export const PageBanner: React.FC<PageBannerProps> = ({title, bannerInfo, totalT
                 <span style={spanStyle}>
                     <h1 className={name.length > 15? "bannerTitleXL":"bannerTitle"}>{name}</h1>
                 </span>
-                <p className="bannerDescription" style={{display: description===''? 'none':'flex'}}>{description}</p>
+                {publisher && publisher !== ''
+                  ? <p className="bannerDescription" style={{display: publisher ===''? 'none':'flex', fontWeight: 600, fontSize: '18px', color: 'white'}}>{publisher}</p>
+                  : <p className="bannerDescription" style={{display: description ===''? 'none':'flex', fontWeight: 600, fontSize: '18px', color: 'white'}}>{description}</p>
+                }
+                
                 <div className="additionalInfo">
                     {user && user[0] && user.map((person: any, index: number) => (
                         <>
@@ -72,7 +76,7 @@ export const PageBanner: React.FC<PageBannerProps> = ({title, bannerInfo, totalT
                                 : <></>
                             }
                             <a key={index} href={`/${person.type}/${person.id}`} style={{content: 'none', textTransform: 'none'}}>{person.type && person.type === 'artist'? person.name : person.display_name}</a>
-                            <p>{totalTracks} songs</p>
+                            {totalTracks !== 0 && <p>{totalTracks} songs</p>}
                         </>
                     ))}
                     {total !== 0 && total&& 
