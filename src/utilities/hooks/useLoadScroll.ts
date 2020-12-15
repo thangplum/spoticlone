@@ -32,7 +32,8 @@ export function useLoadScroll(setTrack: React.Dispatch<React.SetStateAction<any[
                         } else if (data.playlists) {
                           next = data.playlists.next;
                         }
-                        setTrack(tracks => [...tracks, ...data.items])
+                        const newTracks = data.items.map((track: any) => track.track)
+                        setTrack(tracks => [...tracks, ...newTracks])
                         setNext(next)
                     })
                     .catch((error) => console.log(error))

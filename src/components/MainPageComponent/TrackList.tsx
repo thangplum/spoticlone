@@ -11,6 +11,7 @@ interface TrackListProps {
 
 
 export const TrackList = React.forwardRef<HTMLLIElement, TrackListProps>(({tracks, styleName, highlight, playContextTrack}, ref) => {
+  console.log(tracks)
     return (
         <div className="trackListContainer">
             <ol className="trackList">

@@ -12,7 +12,7 @@ interface LikeProps {
 }
 
 export const Like: React.FC<LikeProps> = ({}) => {
-    const [likedTracks, setLikedTracks] = useState<SpotifyApi.SavedTrackObject[]>([]);
+    const [likedTracks, setLikedTracks] = useState<SpotifyApi.TrackObjectFull[]>([]);
     const [numTracks,setNumTracks] = useState(0);
     const spotifyApi = new SpotifyWebApi();
     const token = useContext(TokenContext);
@@ -40,7 +40,7 @@ export const Like: React.FC<LikeProps> = ({}) => {
                 .then(
                     function(data) {
                         console.log(data);
-                        setLikedTracks(data.items);
+                        setLikedTracks(data.items.map(track => track.track));
                         setNumTracks(data.total);
                         setNext(data.next);
                     },
@@ -53,7 +53,7 @@ export const Like: React.FC<LikeProps> = ({}) => {
 
     const playTracks = (trackURI: string) => {
         const track_uri = likedTracks.map((track) => {
-            return track.track.uri;
+            return track.uri;
         })
         const uris = {
             'uris': track_uri

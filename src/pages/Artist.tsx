@@ -159,8 +159,7 @@ export const Artist: React.FC<ArtistProps> = () => {
 
   const playTrack = (trackURI: string) => {
     const body = {
-      context_uri: uri,
-      offset: {uri: trackURI}
+      uris: [trackURI]
     }
     spotifyApi.setAccessToken(token);
     spotifyApi.play(body)

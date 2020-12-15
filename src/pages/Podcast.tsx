@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react'
 import SpotifyWebApi from 'spotify-web-api-js';
+import { Episodes } from '../components/MainPageComponent/Episodes';
 import { Loading } from '../components/MainPageComponent/Loading';
 import { PageBanner } from '../components/MainPageComponent/PageBanner';
 import { PlaylistFunc } from '../components/MainPageComponent/PlaylistFunc';
 import { TokenContext, MessageContext, PlayContext, LoginContext } from '../utilities/context';
 import useId from '../utilities/hooks/useID';
 import useInfiScroll from '../utilities/hooks/useInfiScroll';
-import { ShowObject } from '../utilities/types';
 
 interface PodcastProps {
 
@@ -34,6 +34,7 @@ export const Podcast: React.FC<PodcastProps> = ({}) => {
     release_date: '',
     total: 0
   })
+  const [follow, setFollow] = useState(true);
 
   useEffect(() => {
     if (loggedIn && id) {
@@ -42,13 +43,12 @@ export const Podcast: React.FC<PodcastProps> = ({}) => {
         .then(
           function(data) {
             const {name, description, images, publisher, episodes, total_episodes, uri} = data as any;
-            console.log(data);
-            console.log(total_episodes);
+            console.log(data)
             setBannerInfo({...bannerInfo, name, description, publisher: publisher, images})
             setTotalTracks(total_episodes);
             setShows(episodes.items);
             setURI(uri);
-
+            
             setLoading(false);
           },
           function(error) {
@@ -70,6 +70,19 @@ export const Podcast: React.FC<PodcastProps> = ({}) => {
       .catch((error) => setMessage(`ERROR: ${error}`))
   }
 
+  const playEpisode = (trackURI: string) => {
+    const body = {
+      context_uri: uri,
+      offset: {uri: trackURI}
+    }
+    spotifyApi.setAccessToken(token);
+    spotifyApi.play(body)
+      .then((response) => {
+        setTimeout(() => updatePlayer(), 500)
+      })
+      .catch((error) => setMessage(`ERROR: ${error}`))
+  }
+
   return (
     loading
     ? <Loading type='show' />
@@ -77,7 +90,10 @@ export const Podcast: React.FC<PodcastProps> = ({}) => {
         <PageBanner title='podcast' bannerInfo={bannerInfo} totalTracks={totalTracks} />
         <div className="playListContent">
           <div className="playListOverlay" style={{backgroundColor: `${bannerInfo.primary_color}`}}></div>
-          <PlaylistFunc onFollow={() => setMessage('Oops looks like the Spotify API does not support following albums')} setMessage={setMessage} playContext={playShow}/>
+          <PlaylistFunc type='artist' follow={follow} onFollow={() => setMessage('Oops looks like the Spotify API does not support following podcast')} setMessage={setMessage} playContext={playShow}/>
+          <div className="pod-content">
+            <Episodes ref={lastRef} shows={shows} playContextTrack={playEpisode} />
+          </div>
         </div>
       </div>
   );

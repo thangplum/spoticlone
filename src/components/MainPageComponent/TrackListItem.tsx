@@ -24,7 +24,7 @@ export const TrackListItem = React.forwardRef<HTMLLIElement, TrackListItemProps>
     const updatePlayer = useContext(PlayContext);
 
     let thumbNail;
-    if (styleName === "simplify" && album.images.length > 0) {
+    if (styleName === "simplify" && album && album.images.length > 0) {
         thumbNail = album.images[album.images.length - 1].url;
     }
     const formattedTime = timeFormat(duration_ms);

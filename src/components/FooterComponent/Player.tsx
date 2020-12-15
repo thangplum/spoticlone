@@ -173,7 +173,7 @@ export const Player = forwardRef(
         const tipAccess = localStorage.getItem("tipAccess");
         if (!tipAccess) {
           localStorage.setItem("tipAccess", "true");
-          setConnectTip(true);
+          setConnectTip(false);
         }
       });
 
@@ -541,7 +541,7 @@ export const Player = forwardRef(
                 {connectTip && (
                   <ConnectDevices
                     token={token}
-                    closeTip={() => setConnectTip(!connectTip)}
+                    closeTip={() => setConnectTip(false)}
                   />
                 )}
                 <ControlButton
