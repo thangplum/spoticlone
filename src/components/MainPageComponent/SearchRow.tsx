@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
-import { UserContext } from "../../utilities/context";
+import React, { useEffect, useState } from "react";
 import createRequest from "../../utilities/createRequest";
+import getLocale from "../../utilities/locale";
 import { SearchRowGrid } from "./SearchRowGrid";
 import { SearchRowTitle } from "./SearchRowTitle";
 
@@ -13,8 +13,7 @@ interface SearchRowProps {
 export const SearchRow: React.FC<SearchRowProps> = ({ title, type, query }) => {
   const [result, setResult] = useState([]);
   const [formattedQuery, setFormattedQuery] = useState("");
-  const me = useContext(UserContext);
-  const market = me.country.toLowerCase();
+  const [, market] = getLocale();
 
   useEffect(() => {
     const temp = query.toLowerCase().replace(" ", "+");
@@ -23,7 +22,7 @@ export const SearchRow: React.FC<SearchRowProps> = ({ title, type, query }) => {
 
   useEffect(() => {
     const [source, makeRequest] = createRequest(
-      `https://api.spotify.com/v1/search?q=${formattedQuery}&type=${type}&limit=9&market=${market}`
+      `https://api.spotify.com/v1/search?q=${formattedQuery}&type=${type}&limit=9&market=${market.toLowerCase()}`
     );
     if (formattedQuery.length > 0) {
       makeRequest()

@@ -21,7 +21,7 @@ export const Home: React.FC<HomeProps> = () => {
   const spotifyApi = new SpotifyWebApi();
 
   useEffect(() => {
-    if (token) {
+    if (loggedIn && token) {
       spotifyApi.setAccessToken(token);
 
       spotifyApi.getNewReleases().then(
@@ -68,20 +68,21 @@ export const Home: React.FC<HomeProps> = () => {
           console.log(err);
         }
       );
-    } else {
-      const [language, locale] = getLocale();
-      const [source, makeRequest] = createRequest(
-        `https://api.spotify.com/v1/browse/categories?limit=6&country=${locale}&locale=${language}_${locale}`
-      );
+    } 
+    const [language, locale] = getLocale();
+    const [source, makeRequest] = createRequest(
+      `https://api.spotify.com/v1/browse/categories?limit=6&country=${locale}&locale=${language}_${locale}`
+    );
 
-      makeRequest()
-        .then((data: any) => {
-          setCollections(data.categories.items);
-        })
-        .catch((error: any) => console.log(error));
+    makeRequest()
+      .then((data: any) => {
+        console.log(data);
+        setCollections(data.categories.items);
+      })
+      .catch((error: any) => console.log(error));
 
-      return () => source.cancel();
-    }
+    return () => source.cancel();
+    
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
@@ -115,22 +116,32 @@ export const Home: React.FC<HomeProps> = () => {
       <div className="pageContent">
         {loggedIn ? (
           <>
-            <CollectionRow
+            {recentlyPlaylist && <CollectionRow
               name="Recently played"
               id={null}
               playlists={recentlyPlaylist}
-            />
-            <CollectionRow
+            />}
+            {topTracksAndArtists && <CollectionRow
               name="Jump back in"
               id={null}
               playlists={topTracksAndArtists}
               description={"Your top listens from the past few months."}
-            />
-            <CollectionRow
+            />}
+            {newReleases && <CollectionRow
               name="New releases for you"
               id={null}
               playlists={newReleases}
-            />
+            />}
+            {Object.entries(fpPlaylists).map((playlist) => {
+              return (
+                <CollectionRow
+                  name={playlist[0]}
+                  key={playlist[1].id}
+                  id={playlist[1].id}
+                  playlists={playlist[1].playlists}
+                />
+              );
+            })}
           </>
         ) : (
           <>

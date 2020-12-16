@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import SpotifyWebApi from "spotify-web-api-js";
 import { Loading } from "../components/MainPageComponent/Loading";
 import { PageBanner } from "../components/MainPageComponent/PageBanner";
@@ -17,6 +18,10 @@ interface AlbumProps {}
 
 interface SingleAlbum extends SpotifyApi.SingleAlbumResponse {
   total_tracks: number;
+}
+
+function useHighlight(){
+  return new URLSearchParams(useLocation().search).get('highlight')
 }
 
 export const Album: React.FC<AlbumProps> = () => {
@@ -43,6 +48,7 @@ export const Album: React.FC<AlbumProps> = () => {
     release_date: "",
     total: 0,
   });
+  const highlight = useHighlight()
 
   useEffect(() => {
     setLoading(true);
@@ -157,6 +163,7 @@ export const Album: React.FC<AlbumProps> = () => {
         <div className="page-content">
           <TrackList
             ref={lastRef}
+            highlight={highlight}
             tracks={tracks}
             playContextTrack={playTrack}
           />

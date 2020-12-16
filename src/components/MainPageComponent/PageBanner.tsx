@@ -1,5 +1,6 @@
 import React, { CSSProperties } from "react";
 import Icon from "../../icons";
+import randomColor from 'randomcolor';
 
 interface PageBannerProps {
   title: string;
@@ -41,6 +42,7 @@ export const PageBanner: React.FC<PageBannerProps> = ({
 }) => {
   const {
     name,
+    description,
     user,
     followers,
     primary_color,
@@ -54,6 +56,11 @@ export const PageBanner: React.FC<PageBannerProps> = ({
     imgUrl = images[0].url;
   }
 
+  let secondary_color = randomColor({
+    luminosity: 'dark',
+    hue: 'random'
+  })
+
   if (followers) {
     likes = followers.toLocaleString("en-US");
   }
@@ -61,7 +68,7 @@ export const PageBanner: React.FC<PageBannerProps> = ({
     <div
       className="banner"
       style={{
-        backgroundColor: `${primary_color}`,
+        background: `linear-gradient(to bottom, ${primary_color} 0%, ${secondary_color} 100%)`,
         height: title === "artist" ? "40vh" : "30vh",
       }}
     >
@@ -87,12 +94,24 @@ export const PageBanner: React.FC<PageBannerProps> = ({
       </div>
 
       <div className="bannerInfo">
-        <h2 className="pageTitle">{title}</h2>
+        <h2 className="pageTitleSmall">{title}</h2>
         <span style={spanStyle}>
           <h1 className={name.length > 15 ? "bannerTitleXL" : "bannerTitle"}>
             {name}
           </h1>
         </span>
+        {description && description !== "" && (
+          <p
+            className="bannerDescription"
+            style={{
+              display: description === "" ? "none" : "flex",
+              fontSize: "12px",
+              color: "hsla(0,0%,100%,.7)",
+            }}
+          >
+            {description}
+          </p>
+        )}
         {publisher && publisher !== "" && (
           <p
             className="bannerDescription"
@@ -100,7 +119,7 @@ export const PageBanner: React.FC<PageBannerProps> = ({
               display: publisher === "" ? "none" : "flex",
               fontWeight: 600,
               fontSize: "18px",
-              color: "white",
+              color: "hsla(0,0%,100%,.7)",
             }}
           >
             {publisher}
@@ -137,7 +156,7 @@ export const PageBanner: React.FC<PageBannerProps> = ({
                 {totalTracks !== 0 && <p>{totalTracks} songs</p>}
               </>
             ))}
-          {total !== 0 && total && <h2>{total} Playlists</h2>}
+          {total !== 0 && total && <p>{total} Playlists</p>}
           {release_date && <p>{release_date}</p>}
           {followers !== 0 && (
             <p style={title === "artist" ? followerStyle : undefined}>
