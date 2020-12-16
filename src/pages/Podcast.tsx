@@ -10,8 +10,10 @@ import {
   PlayContext,
   LoginContext,
 } from "../utilities/context";
+import createRequest from "../utilities/createRequest";
 import useId from "../utilities/hooks/useID";
 import useInfiScroll from "../utilities/hooks/useInfiScroll";
+import getLocale from "../utilities/locale";
 
 interface PodcastProps {}
 
@@ -39,12 +41,13 @@ export const Podcast: React.FC<PodcastProps> = () => {
   });
   const [follow, ] = useState(true);
   const [description, setDescription] = useState("");
+  const [language, locale] = getLocale();
 
   useEffect(() => {
-    if (loggedIn && id) {
-      spotifyApi.setAccessToken(token);
-      spotifyApi.getShow(id).then(
-        function (data) {
+    const [source, makeRequest] = createRequest(`https://api.spotify.com/v1/shows/${id}?market=${locale.toLowerCase()}`)
+    if (id) {
+      makeRequest()
+        .then((data) => {
           const {
             name,
             description,
@@ -53,8 +56,8 @@ export const Podcast: React.FC<PodcastProps> = () => {
             episodes,
             total_episodes,
             uri,
-          } = data as any;
-          console.log(data);
+          } = data;
+          console.log(data)
           setBannerInfo({
             ...bannerInfo,
             name,
@@ -67,11 +70,14 @@ export const Podcast: React.FC<PodcastProps> = () => {
           setURI(uri);
           setDescription(description);
           setLoading(false);
-        },
-        function (error) {
-          console.log(error);
-        }
-      );
+        })
+        .catch((error) => {
+          setLoading(false);
+          setMessage(`ERROR: ${error}`);
+        });
+    }
+    return () => {
+      source.cancel();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);

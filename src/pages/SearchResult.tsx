@@ -14,7 +14,6 @@ export const SearchResult: React.FC<SearchResultProps> = ({ query }) => {
         <SearchRow title="Albums" type="album" query={query} />
         <SearchRow title="Playlists" type="playlist" query={query} />
         <SearchRow title="Podcasts" type="show" query={query} />
-        <SearchRow title="Episodes" type="episode" query={query} />
       </div>
     </div>
   );
