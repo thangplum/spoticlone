@@ -76,7 +76,6 @@ export const Home: React.FC<HomeProps> = () => {
 
     makeRequest()
       .then((data: any) => {
-        console.log(data);
         setCollections(data.categories.items);
       })
       .catch((error: any) => console.log(error));
@@ -116,18 +115,18 @@ export const Home: React.FC<HomeProps> = () => {
       <div className="pageContent">
         {loggedIn ? (
           <>
-            {recentlyPlaylist && <CollectionRow
+            {recentlyPlaylist.length > 0 && <CollectionRow
               name="Recently played"
               id={null}
               playlists={recentlyPlaylist}
             />}
-            {topTracksAndArtists && <CollectionRow
+            {topTracksAndArtists.length > 0 && <CollectionRow
               name="Jump back in"
               id={null}
               playlists={topTracksAndArtists}
               description={"Your top listens from the past few months."}
             />}
-            {newReleases && <CollectionRow
+            {newReleases.length > 0 && <CollectionRow
               name="New releases for you"
               id={null}
               playlists={newReleases}
