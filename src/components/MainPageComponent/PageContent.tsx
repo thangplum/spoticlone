@@ -11,6 +11,8 @@ import { Playlist } from '../../pages/Playlist';
 import { Album } from '../../pages/Album';
 import { Artist } from '../../pages/Artist';
 import { Podcast } from '../../pages/Podcast';
+import { Genre } from '../../pages/Genre';
+import { User } from '../../pages/User';
 
 
 interface PageContentProps {
@@ -48,6 +50,12 @@ export const PageContent: React.FC<PageContentProps> = ({query, message, status}
                 </Route>
                 <Route path='/show'>
                   <Podcast />
+                </Route>
+                <Route path='/genre'>
+                  <Genre />
+                </Route>
+                <Route path='/user'>
+                  <User />
                 </Route>
             </Switch>
             <div className={`status-bar-wrapper ${status? 'active':''}`}>

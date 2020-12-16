@@ -5,8 +5,8 @@ interface PageTitleProps {
 }
 
 const style = {
-    fontSize: '24px',
-    fontSeight: '700',
+    fontSize: '60px',
+    fontWeight: 700,
     lineHeight: '28px',
     letterSpacing: '-.04em',
     textTransform: 'none',
@@ -15,8 +15,12 @@ const style = {
 
 export const PageTitle: React.FC<PageTitleProps> = ({title}) => {
     return (
-        <div className='PageTitle'>
+      <div className="smallBanner">
+        <div className='pageTitleContainer'>
             <h1 style={style}>{title}</h1>
         </div>
+        <div className="bannerOverlay"></div>
+      </div>
+        
     );
 }

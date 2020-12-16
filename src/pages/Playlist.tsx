@@ -65,15 +65,14 @@ export const Playlist: React.FC<PlaylistProps> = () => {
             } else {
               setBannerInfo(bannerInfo => ({...bannerInfo, name, description, primary_color, user: [owner], followers: followers.total, images} as SinglePlaylistResponse))
             }
-            console.log(data);
-            setTracks(tracks.items.map((track) => track.track));
+            setTracks(tracks.items);
             setNext(tracks.next || '');
             setURI(uri);
             setTotal(data.tracks.total);
             setLoading(false);
           },
           function(error) {
-            console.log(error);
+            setMessage(`ERROR: ${error}`)
           }
         )
     }
@@ -92,7 +91,7 @@ export const Playlist: React.FC<PlaylistProps> = () => {
             }  
           },
           function(error) {
-            console.log(error);
+            setMessage(`ERROR: ${error}`)
           }
         )
     }
@@ -104,10 +103,11 @@ export const Playlist: React.FC<PlaylistProps> = () => {
     spotifyApi.getUserPlaylists()
       .then(
         function(data) {
+          console.log(id);
           setPlaylists(data.items);
         },
         function(error) {
-          console.log(error);
+          setMessage(`ERROR: ${error}`);
         }
       )
   }
@@ -115,21 +115,26 @@ export const Playlist: React.FC<PlaylistProps> = () => {
   const followPlaylist = () => {
     spotifyApi.setAccessToken(token);
     if (!like) {
+      
       spotifyApi.followPlaylist(id)
-        .then((response) => {
-          setMessage('Removed from your Library');
-          setLike(!like);
-          setTimeout(() => refreshPlaylist(), 1000);
-        })
-        .catch((error) => setMessage(`ERROR: ${error}`))
-    } else {
-      spotifyApi.unfollowPlaylist(id)
         .then((response) => {
           setMessage('Added to your Library');
           setLike(!like);
-          setTimeout(() => refreshPlaylist(), 1000);
+          setTimeout(() => refreshPlaylist(), 500);
         })
-        .catch((error) => setMessage(`ERROR: ${error}`))
+        .catch((error) => {
+          setMessage(`ERROR: ${error}`)
+        })
+    } else {
+      spotifyApi.unfollowPlaylist(id)
+        .then((response) => {
+          setMessage('Removed from your Library');
+          setLike(!like);
+          setTimeout(() => refreshPlaylist(), 500);
+        })
+        .catch((error) => {
+          setMessage(`ERROR: ${error}`)
+        })
     }
   }
 

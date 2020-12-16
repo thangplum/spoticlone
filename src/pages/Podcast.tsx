@@ -35,6 +35,7 @@ export const Podcast: React.FC<PodcastProps> = ({}) => {
     total: 0
   })
   const [follow, setFollow] = useState(true);
+  const [description, setDescription] = useState('');
 
   useEffect(() => {
     if (loggedIn && id) {
@@ -48,7 +49,7 @@ export const Podcast: React.FC<PodcastProps> = ({}) => {
             setTotalTracks(total_episodes);
             setShows(episodes.items);
             setURI(uri);
-            
+            setDescription(description);
             setLoading(false);
           },
           function(error) {
@@ -92,7 +93,7 @@ export const Podcast: React.FC<PodcastProps> = ({}) => {
           <div className="playListOverlay" style={{backgroundColor: `${bannerInfo.primary_color}`}}></div>
           <PlaylistFunc type='artist' follow={follow} onFollow={() => setMessage('Oops looks like the Spotify API does not support following podcast')} setMessage={setMessage} playContext={playShow}/>
           <div className="pod-content">
-            <Episodes ref={lastRef} shows={shows} playContextTrack={playEpisode} />
+            <Episodes ref={lastRef} shows={shows} description={description} playContextTrack={playEpisode} />
           </div>
         </div>
       </div>

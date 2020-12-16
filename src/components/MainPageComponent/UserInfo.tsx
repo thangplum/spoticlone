@@ -17,7 +17,7 @@ const UserInfo: React.FC<UserInfoProps> = ({}) => {
     const logout = () => {
         axios(`${process.env.REACT_APP_BACK_URI}/logout`, {withCredentials: true})
             .then(response => {
-                window.location.reload()
+                window.location.assign('/')
             })
             .catch(error => console.log(error))
     }

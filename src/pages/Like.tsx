@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import SpotifyWebApi from 'spotify-web-api-js';
 import { PageBanner } from '../components/MainPageComponent/PageBanner';
 import { PlaylistFunc } from '../components/MainPageComponent/PlaylistFunc';
@@ -11,8 +11,8 @@ interface LikeProps {
 
 }
 
-export const Like: React.FC<LikeProps> = ({}) => {
-    const [likedTracks, setLikedTracks] = useState<SpotifyApi.TrackObjectFull[]>([]);
+export const Like: React.FC<LikeProps> = () => {
+    const [likedTracks, setLikedTracks] = useState<SpotifyApi.SavedTrackObject[]>([]);
     const [numTracks,setNumTracks] = useState(0);
     const spotifyApi = new SpotifyWebApi();
     const token = useContext(TokenContext);
@@ -39,8 +39,7 @@ export const Like: React.FC<LikeProps> = ({}) => {
             spotifyApi.getMySavedTracks()
                 .then(
                     function(data) {
-                        console.log(data);
-                        setLikedTracks(data.items.map(track => track.track));
+                        setLikedTracks(data.items);
                         setNumTracks(data.total);
                         setNext(data.next);
                     },
@@ -53,16 +52,13 @@ export const Like: React.FC<LikeProps> = ({}) => {
 
     const playTracks = (trackURI: string) => {
         const track_uri = likedTracks.map((track) => {
-            return track.uri;
+          return track.track.uri;
         })
         const uris = {
             'uris': track_uri
         }
         spotifyApi.setAccessToken(token);
         spotifyApi.play(uris)
-            .then((response) => {
-                console.log(response);
-            })
             .catch((error) => {
                 console.log(error);
             })
@@ -74,9 +70,6 @@ export const Like: React.FC<LikeProps> = ({}) => {
         }
         spotifyApi.setAccessToken(token);
         spotifyApi.play(body)
-            .then((response) => {
-                console.log(response);
-            })
             .catch((error) => {
                 console.log(error);
             })

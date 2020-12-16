@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 interface ListItemProps {
     name: string;
     id: string;
-    ref?: (node: HTMLLIElement) => void;
+    ref?: (node: HTMLLIElement | null) => void;
 }
 
 export const ListItem = React.forwardRef<HTMLLIElement, ListItemProps>(({name, id}, ref) => {

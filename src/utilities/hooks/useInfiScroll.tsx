@@ -4,7 +4,7 @@ import createRequest from '../createRequest';
 
 function useInfiScroll(setList: React.Dispatch<React.SetStateAction<any[]>>): [
   React.Dispatch<React.SetStateAction<string>>,
-  (node: HTMLLIElement) => void
+  (node: HTMLLIElement | HTMLDivElement | null) => void 
 ] {
     const [next, setNext] = useState("");
 

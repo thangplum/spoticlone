@@ -4,13 +4,12 @@ import SpotifyWebApi from 'spotify-web-api-js';
 import { LoginContext, TokenContext } from '../utilities/context';
 import getLocale from '../utilities/locale';
 import createRequest from '../utilities/createRequest';
-import { Loading } from '../components/MainPageComponent/Loading';
 
 interface HomeProps {
 
 }
 
-export const Home: React.FC<HomeProps> = ({}) => {
+export const Home: React.FC<HomeProps> = () => {
     const [recentlyPlaylist, setRecentlyPlaylist] = useState<SpotifyApi.TrackObjectSimplified[]>([]);
     const [newReleases, setNewReleases] = useState<any[]>([]);
     const [topTracksAndArtists, setTop] = useState<any[]>([]);
@@ -40,7 +39,7 @@ export const Home: React.FC<HomeProps> = ({}) => {
                 .then (
                     function(data) {
                         const recentlyPlaylistList: SpotifyApi.TrackObjectSimplified[] = [];
-                        data.items.map((track, index) => {
+                        data.items.map((track) => {
                             recentlyPlaylistList.push(track.track as SpotifyApi.TrackObjectSimplified);
                         })
                         setRecentlyPlaylist(recentlyPlaylistList);
@@ -53,7 +52,7 @@ export const Home: React.FC<HomeProps> = ({}) => {
                 .then (
                     function(data) {
                         data.items.slice(0, 5).map((track, index) => {
-                            setTop(prevTop => ([...prevTop, track]));
+                          setTop(prevTop => ([...prevTop, track]));
                         });
                     },
                     function(err) {
@@ -109,7 +108,6 @@ export const Home: React.FC<HomeProps> = ({}) => {
     
     useEffect(() => {
         setFpPlaylists({...fpPlaylists, ...tempPlaylists});
-        // setLoading(false);
     }, [tempPlaylists])
 
     return (
@@ -122,7 +120,6 @@ export const Home: React.FC<HomeProps> = ({}) => {
                         <CollectionRow name='New releases for you' id={null} playlists={newReleases} />
                     </>
                 :   <>
-                        <CollectionRow name='Uniquely Yours' id={null} playlists={[{id:'', to:'/tracks', description:'', name:'Liked Songs', images:[{url: 'https://misc.scdn.co/liked-songs/liked-songs-300.png'}]}]}/>
                         {   
                             Object.entries(fpPlaylists).map(playlist => {
                                 return (

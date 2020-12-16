@@ -66,7 +66,6 @@ export const Album: React.FC<AlbumProps> = () => {
           function(data) {
             // SpotifyApi.SingleAlbumResponse does not have total_tracks attribute
             const temp = data as SingleAlbum;
-            console.log(data);
             const {album_type, name, artists, tracks, images, release_date, uri} = data;
             setBannerInfo(bannerInfo => ({...bannerInfo, album_type, name, user:artists, images, release_date} as SingleAlbumResponse));
             setTracks(tracks.items);

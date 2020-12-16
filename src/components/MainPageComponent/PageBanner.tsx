@@ -63,18 +63,17 @@ export const PageBanner: React.FC<PageBannerProps> = ({title, bannerInfo, totalT
                     <h1 className={name.length > 15? "bannerTitleXL":"bannerTitle"}>{name}</h1>
                 </span>
                 {publisher && publisher !== ''
-                  ? <p className="bannerDescription" style={{display: publisher ===''? 'none':'flex', fontWeight: 600, fontSize: '18px', color: 'white'}}>{publisher}</p>
-                  : <p className="bannerDescription" style={{display: description ===''? 'none':'flex', fontWeight: 600, fontSize: '18px', color: 'white'}}>{description}</p>
+                  && <p className="bannerDescription" style={{display: publisher ===''? 'none':'flex', fontWeight: 600, fontSize: '18px', color: 'white'}}>{publisher}</p>
                 }
                 
                 <div className="additionalInfo">
                     {user && user[0] && user.map((person: any, index: number) => (
                         <>
                             {person.images && person.images[0] 
-                                ? <img style={{borderRadius: '50%', width:'25px'}} src={person.images[0].url}></img>
+                                ? <img style={{borderRadius: '50%', width:'25px', marginRight: '10px'}} src={person.images[0].url}></img>
                                 : <></>
                             }
-                            <a key={index} href={`/${person.type}/${person.id}`} style={{content: 'none', textTransform: 'none', paddingLeft: "10px"}}>{person.type && person.type === 'artist'? person.name : person.display_name}</a>
+                            <a key={index} href={`/${person.type}/${person.id}`} style={{content: 'none', textTransform: 'none'}}>{person.type && person.type === 'artist'? person.name : person.display_name}</a>
                             {totalTracks !== 0 && <p>{totalTracks} songs</p>}
                         </>
                     ))}

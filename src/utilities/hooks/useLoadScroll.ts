@@ -32,14 +32,13 @@ export function useLoadScroll(setTrack: React.Dispatch<React.SetStateAction<any[
                         } else if (data.playlists) {
                           next = data.playlists.next;
                         }
-                        const newTracks = data.items.map((track: any) => track.track)
+                        const newTracks = data.items;
                         setTrack(tracks => [...tracks, ...newTracks])
                         setNext(next)
                     })
                     .catch((error) => console.log(error))
             }
-        }, options)
-        
+        })
         if (node) observer.current.observe(node)
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [next])

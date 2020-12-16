@@ -35,7 +35,7 @@ export const EpisodeListItem = React.forwardRef<HTMLLIElement, EpisodeListItemPr
           </div>
           <div className="showTitleContainer">
             <h3 className="showTitle">{name}</h3>
-            <p style={{paddingLeft: "20px"}}>{shortenDescription}</p>
+            <p>{shortenDescription}</p>
             <div className="additionalOptions">
               <button className="smallPlayButton no-outline" title="Play" data-tip='play' data-for='tooltipMain' data-event='click' onClick={() => {
                 playContextTrack(uri)

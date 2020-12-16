@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React from 'react'
 import { ListItem } from './ListItem';
 
 interface NormalPlaylistsProps {
@@ -22,4 +22,3 @@ export const NormalPlaylists = React.forwardRef<HTMLLIElement, NormalPlaylistsPr
       </div>
   );
 })
-{/* <ListItem key={playlist.id} name={playlist.name} id={playlist.id}/> */}

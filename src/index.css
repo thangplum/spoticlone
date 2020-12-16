@@ -752,9 +752,9 @@ body{
     display: flex;
     align-items: center;
     justify-content: center;
-    opacity: 0.6;
+    /* opacity: 0.6; */
     margin-right: 16px;
-    cursor: not-allowed;
+    /* cursor: not-allowed; */
 }
 
 .SearchContainer{
@@ -1196,12 +1196,14 @@ body{
     flex-flow: column;
 }
 
-.pageTitle{
-    font-weight: 500;
+.pageTitle {
+  text-transform: capitalize;
+}
+
+.pageTitleContainer{
     margin-top: 16px;
     margin-bottom: 4px;
-    font-size: 12px;
-    text-transform: uppercase;
+    z-index: 2;
 }
 
 .bannerTitle{
@@ -1863,4 +1865,16 @@ hr {
   font-size: 25px;
   padding-bottom: 30px;
   padding-left: 24px;
+}
+
+.smallBanner{
+  max-height: 300px;
+  min-height: 200px;
+  height: 20vh;
+  color: #fff;
+  position: relative;
+  padding: 0 32px 24px;
+  display: flex;
+  overflow: hidden;
+  align-items: flex-end;
 }

@@ -7,7 +7,6 @@ function useId(page?: string) {
 
     useEffect(() => {
         const path = location.pathname.split('/')
-
         if (path.length === 3){
             setId(path[path.length-1])
         } else if (path.length > 3){
