@@ -13,12 +13,9 @@ import {
 import useId from "../utilities/hooks/useID";
 import useInfiScroll from "../utilities/hooks/useInfiScroll";
 import { SingleAlbumResponse } from "../utilities/types";
+import createRequest from "../utilities/createRequest";
 
 interface AlbumProps {}
-
-interface SingleAlbum extends SpotifyApi.SingleAlbumResponse {
-  total_tracks: number;
-}
 
 function useHighlight(){
   return new URLSearchParams(useLocation().search).get('highlight')
@@ -32,11 +29,9 @@ export const Album: React.FC<AlbumProps> = () => {
   const [loading, setLoading] = useState(true);
   const [tracks, setTracks] = useState<SpotifyApi.TrackObjectSimplified[]>([]);
   const [uri, setUri] = useState("");
-  const [, setLike] = useState(false);
   const [totalTracks, setTotalTracks] = useState(0);
   const spotifyApi = new SpotifyWebApi();
   const [setNext, lastRef] = useInfiScroll(setTracks);
-
   const [bannerInfo, setBannerInfo] = useState<SingleAlbumResponse>({
     album_type: "",
     name: "",
@@ -48,30 +43,13 @@ export const Album: React.FC<AlbumProps> = () => {
     release_date: "",
     total: 0,
   });
-  const highlight = useHighlight()
+  const highlight = useHighlight();
 
   useEffect(() => {
-    setLoading(true);
-    setLike(false);
-    setUri("");
-    setBannerInfo({
-      album_type: "",
-      name: "",
-      description: "",
-      primary_color: "#262626",
-      user: [],
-      followers: 0,
-      images: [],
-      release_date: "",
-      total: 0,
-    });
-    setTracks([]);
-    if (id && token) {
-      spotifyApi.setAccessToken(token);
-      spotifyApi.getAlbum(id).then(
-        function (data) {
-          // SpotifyApi.SingleAlbumResponse does not have total_tracks attribute
-          const temp = data as SingleAlbum;
+    const [source, makeRequest] = createRequest(`https://api.spotify.com/v1/albums/${id}`);
+    if (id) {
+      makeRequest()
+        .then((data) => {
           const {
             album_type,
             name,
@@ -80,30 +58,28 @@ export const Album: React.FC<AlbumProps> = () => {
             images,
             release_date,
             uri,
+            total_tracks
           } = data;
-          setBannerInfo(
-            (bannerInfo) =>
-              ({
-                ...bannerInfo,
-                album_type,
-                name,
-                user: artists,
-                images,
-                release_date,
-              } as SingleAlbumResponse)
-          );
+          setBannerInfo((bannerInfo) => ({
+            ...bannerInfo,
+            album_type,
+            name,
+            user: artists,
+            images: images,
+            release_date,
+          }));
           setTracks(tracks.items);
           setNext(tracks.next);
           setUri(uri);
-          setTotalTracks(temp.total_tracks);
+          setTotalTracks(total_tracks);
           setLoading(false);
-        },
-        function (error) {
+        })
+        .catch((error) => {
           setLoading(false);
           setMessage(`ERROR: ${error}`);
-        }
-      );
+        });
     }
+    return () => source.cancel()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 

@@ -13,6 +13,7 @@ import { TrackList } from "../components/MainPageComponent/TrackList";
 import useInfiScroll from "../utilities/hooks/useInfiScroll";
 import { SinglePlaylistResponse } from "../utilities/types";
 import { PlaylistFunc } from "../components/MainPageComponent/PlaylistFunc";
+import createRequest from "../utilities/createRequest";
 
 interface PlaylistProps {}
 
@@ -44,23 +45,10 @@ export const Playlist: React.FC<PlaylistProps> = () => {
   });
 
   useEffect(() => {
-    setLike(false);
-    setURI("");
-    setBannerInfo({
-      name: "",
-      description: "",
-      primary_color: "#262626",
-      user: [],
-      followers: 0,
-      images: [],
-      release_date: "",
-      total: 0,
-    });
-    setTracks([]);
-    setLoading(true);
+    const [playSource, makeRequest] = createRequest(`https://api.spotify.com/v1/playlists/${id}`)
     if (id) {
-      spotifyApi.getPlaylist(id).then(
-        function (data) {
+      makeRequest()
+        .then((data) => {
           const {
             name,
             description,
@@ -70,28 +58,24 @@ export const Playlist: React.FC<PlaylistProps> = () => {
             images,
             uri,
           } = data;
-          setBannerInfo(
-            (bannerInfo) =>
-              ({
-                ...bannerInfo,
-                name,
-                description,
-                user: [owner],
-                followers: followers.total,
-                images,
-              } as SinglePlaylistResponse)
-          );
-
-          setTracks(tracks.items);
-          setNext(tracks.next || "");
+          setBannerInfo((bannerInfo) => ({
+            ...bannerInfo,
+            name,
+            description,
+            user: [owner],
+            followers,
+            images: images,
+          }));
+          setTracks(tracks.items.map((track: any) => track.track));
+          setNext(tracks.next);
           setURI(uri);
           setTotal(data.tracks.total);
           setLoading(false);
-        },
-        function (error) {
+        })
+        .catch((error) => {
+          setLoading(false);
           setMessage(`ERROR: ${error}`);
-        }
-      );
+        });
     }
 
     if (token) {
@@ -110,6 +94,9 @@ export const Playlist: React.FC<PlaylistProps> = () => {
           setMessage(`ERROR: ${error}`);
         }
       );
+    }
+    return () => {
+      playSource.cancel();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, loggedIn]);
