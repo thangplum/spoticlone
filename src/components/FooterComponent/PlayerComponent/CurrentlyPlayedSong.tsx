@@ -1,6 +1,5 @@
-import React, { useContext } from "react";
+import React from "react";
 import Icon from "../../../icons";
-import { MessageContext } from "../../../utilities/context";
 
 interface CurrentlyPlayedSongProps {
   playingSongInfo: any;
@@ -59,9 +58,8 @@ export const CurrentlyPlayedSong: React.FC<CurrentlyPlayedSongProps> = ({
         </div>
       </div>
     );
-  } else if (playingSongInfo.type === 'episode') {
+  } else if (playingSongInfo.type === "episode") {
     const { images, id, name, external_urls, show } = playingSongInfo;
-    console.log(playingSongInfo)
     let imageUrl;
     if (images && images.length > 0) {
       imageUrl = images[images.length - 1].url;
@@ -82,17 +80,20 @@ export const CurrentlyPlayedSong: React.FC<CurrentlyPlayedSongProps> = ({
           style={{ display: name === "" ? "none" : "" }}
         >
           <div className="player-info-track ellipsis-one-line">
-            <a href={external_urls ? external_urls.spotify : `/episode/${id}`}>{name}</a>
+            <a href={external_urls ? external_urls.spotify : `/episode/${id}`}>
+              {name}
+            </a>
           </div>
           <div className="player-info-artist ellipsis-one-line">
-            {show
-              ? <a href={show.external_urls.spotify}>{show.name}</a>
-              : <></>
-            }
+            {show ? (
+              <a href={show.external_urls.spotify}>{show.name}</a>
+            ) : (
+              <></>
+            )}
           </div>
         </div>
       </div>
-    )
+    );
   } else {
     return (
       <div className="now-playing">
@@ -102,6 +103,6 @@ export const CurrentlyPlayedSong: React.FC<CurrentlyPlayedSongProps> = ({
           </div>
         </div>
       </div>
-    )
+    );
   }
 };

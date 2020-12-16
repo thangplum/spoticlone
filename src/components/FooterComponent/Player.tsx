@@ -8,8 +8,7 @@ import React, {
   useState,
 } from "react";
 import SpotifyWebApi from "spotify-web-api-js";
-import { MessageContext, TokenContext } from "../../utilities/context";
-import { getHashParams } from "../../utilities/getHashParams";
+import { MessageContext } from "../../utilities/context";
 import { ConnectDevices } from "./PlayerComponent/ConnectDevices";
 import { ControlButton } from "./PlayerComponent/ControlButton";
 import { CurrentlyPlayedSong } from "./PlayerComponent/CurrentlyPlayedSong";
@@ -23,7 +22,6 @@ import timeFormat from "../../utilities/timeFormat";
 import Heartbeat from "react-heartbeat";
 import requestWithToken from "../../utilities/requestWithToken";
 import axios from "axios";
-import { connect } from "http2";
 
 interface PlayerProps {
   token: string;
@@ -49,7 +47,7 @@ export const Player = forwardRef(
     });
     const [playback, setPlayback] = useState(0);
     const [playInfo, setPlayInfo] = useState<any>({
-      type: '',
+      type: "",
       album: {},
       artists: [],
       name: "",
@@ -83,7 +81,6 @@ export const Player = forwardRef(
         spotifyApi.getMyRecentlyPlayedTracks().then(
           function (data) {
             setRecentlyPlayedTrack(data.items[0].track);
-            //setRecentTrackTotalTime(data.items[0].track.duration_ms)
           },
           function (err) {
             console.log(err);
@@ -95,6 +92,7 @@ export const Player = forwardRef(
         clearTimeout(timerRef.current);
         player.disconnect();
       };
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const loadScript = () => {
@@ -224,7 +222,7 @@ export const Player = forwardRef(
               requestShow()
                 .then((response) => {
                   if (response.status === 200) {
-                    console.log(response)
+                    console.log(response);
                     const {
                       repeat_state,
                       shuffle_state,
@@ -234,12 +232,12 @@ export const Player = forwardRef(
                       device,
                     } = response.data;
                     setPlayback(progress_ms / item.duration_ms);
-          
+
                     timerRef.current = window.setTimeout(
                       () => updateState(),
                       item.duration_ms - progress_ms + 10
                     );
-          
+
                     setVolume(device.volume_percent / 100);
                     setPlaybackState({
                       ...playbackState,
@@ -263,7 +261,7 @@ export const Player = forwardRef(
                 })
                 .catch((error) => {
                   console.log(error);
-                })
+                });
             } else {
               spotifyApi.setAccessToken(token);
               spotifyApi.getMyCurrentPlaybackState().then(
@@ -308,7 +306,7 @@ export const Player = forwardRef(
                   );
                 }
               );
-            } 
+            }
           } else if (response.status === 204) {
             setMessage(
               "Player is not working, select a device to start listening"
@@ -478,9 +476,7 @@ export const Player = forwardRef(
         ) : null}
         <div className="player">
           <div className="player-left">
-            <CurrentlyPlayedSong
-              playingSongInfo={playInfo}
-            />
+            <CurrentlyPlayedSong playingSongInfo={playInfo} />
           </div>
           <div className="player-center">
             <div className="player-control-buttons">

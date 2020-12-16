@@ -16,7 +16,6 @@ import PrevTrack from './PrevTrack'
 import NextTrack from './NextTrack'
 import Shuffle from './Shuffle'
 import Repeat from './Repeat'
-import Speaker from './Devices'
 import Volume from './Volume'
 import Pause from './Pause'
 

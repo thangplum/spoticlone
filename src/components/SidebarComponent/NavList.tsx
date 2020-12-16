@@ -1,15 +1,9 @@
-import React, { useContext } from 'react';
+import React from "react";
 
-interface NavListProps {
+interface NavListProps {}
 
-}
-
-const NavList: React.FC<NavListProps> = ({children}) => {
-    return (
-        <ul className="nav-list">
-            {children}
-        </ul>
-    );
-}
+const NavList: React.FC<NavListProps> = ({ children }) => {
+  return <ul className="nav-list">{children}</ul>;
+};
 
 export default NavList;

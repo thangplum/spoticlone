@@ -1,4 +1,4 @@
-export default function getLocale(){
-    let language = navigator.language
-    return language && language.length === 2 ? language.split('-'):['en', 'US']
+export default function getLocale() {
+  let language = navigator.language;
+  return language && language.length === 2 ? language.split("-") : ["en", "US"];
 }

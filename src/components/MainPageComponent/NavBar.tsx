@@ -1,15 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import {useLocation} from 'react-router-dom';
+import React from "react";
 
 interface NavBarProps {
-    children: any
+  children: any;
 }
 
-
-export const NavBar: React.FC<NavBarProps> = ({children}) => {
-    return (
-        <div className="header-bar" >
-            {children}
-        </div>
-    );
-}
+export const NavBar: React.FC<NavBarProps> = ({ children }) => {
+  return <div className="header-bar">{children}</div>;
+};
