@@ -59,12 +59,9 @@ export const Playlist: React.FC<PlaylistProps> = () => {
       spotifyApi.getPlaylist(id)
         .then(
           function(data) {
-            const {name, description, owner, followers, primary_color, tracks, images, uri} = data;
-            if (primary_color === null) {
-              setBannerInfo(bannerInfo => ({...bannerInfo, name, description, user: [owner], followers: followers.total, images} as SinglePlaylistResponse))
-            } else {
-              setBannerInfo(bannerInfo => ({...bannerInfo, name, description, primary_color, user: [owner], followers: followers.total, images} as SinglePlaylistResponse))
-            }
+            const {name, description, owner, followers, tracks, images, uri} = data;
+            setBannerInfo(bannerInfo => ({...bannerInfo, name, description, user: [owner], followers: followers.total, images} as SinglePlaylistResponse))
+           
             setTracks(tracks.items);
             setNext(tracks.next || '');
             setURI(uri);
