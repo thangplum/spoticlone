@@ -7,8 +7,7 @@ import { PlaylistFunc } from "../components/MainPageComponent/PlaylistFunc";
 import {
   TokenContext,
   MessageContext,
-  PlayContext,
-  LoginContext,
+  PlayContext
 } from "../utilities/context";
 import createRequest from "../utilities/createRequest";
 import useId from "../utilities/hooks/useID";
@@ -23,7 +22,6 @@ export const Podcast: React.FC<PodcastProps> = () => {
   const token = useContext(TokenContext);
   const setMessage = useContext(MessageContext);
   const updatePlayer = useContext(PlayContext);
-  const loggedIn = useContext(LoginContext);
   const spotifyApi = new SpotifyWebApi();
   const [shows, setShows] = useState<any[]>([]);
   const [, lastRef] = useInfiScroll(setShows);
@@ -41,7 +39,7 @@ export const Podcast: React.FC<PodcastProps> = () => {
   });
   const [follow, ] = useState(true);
   const [description, setDescription] = useState("");
-  const [language, locale] = getLocale();
+  const [, locale] = getLocale();
 
   useEffect(() => {
     const [source, makeRequest] = createRequest(`https://api.spotify.com/v1/shows/${id}?market=${locale.toLowerCase()}`)
@@ -57,7 +55,6 @@ export const Podcast: React.FC<PodcastProps> = () => {
             total_episodes,
             uri,
           } = data;
-          console.log(data)
           setBannerInfo({
             ...bannerInfo,
             name,
